@@ -35,13 +35,13 @@ mkdir /home/user/.ssh
 # nos movemos al directorio
 cd ~/.ssh
 ```
-Generear las llaves.
+Generar las llaves.
 ```bash
 ssh-keygen -t rsa -b 4096 -C "mimail@mail.com"
 ```
-Copiarlo la llave `.pub` al servidor remoto.
+Copiar la llave `.pub` al servidor remoto.
 ```bash
-ssh-copy-id .i ~/path/key.pub bender@192.168.0.10
+ssh-copy-id -i ~/.ssh/key.pub bender@192.168.0.10
 ```
 Durane este proceso se solicitara la contraseña por única ocasión.
 
@@ -71,4 +71,7 @@ sudo passwd user
 
 #### Extensión
 Tunnels ssh.
-xxx
+- **Local tunnel**: permite traer un servicio del servidor remoto y ejecutarlo en el equipo de manera local `ssh -L localport:127.0.0.1:remoteport user@ip`.
+```bash
+ssh -L 8000:127.0.0.1:8000 bender@192.168.0.10
+```
