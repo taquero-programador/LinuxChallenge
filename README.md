@@ -71,7 +71,22 @@ sudo passwd user
 
 #### Extensión
 Tunnels ssh.
-- **Local tunnel**: permite traer un servicio del servidor remoto y ejecutarlo en el equipo de manera local `ssh -L localport:127.0.0.1:remoteport user@ip`.
+**Local tunnel:** permite traer un servicio del servidor remoto y ejecutarlo en el equipo de manera local `ssh -L localport:127.0.0.1:remoteport user@ip`.
 ```bash
 ssh -L 8000:127.0.0.1:8000 bender@192.168.0.10
 ```
+Esto accede al servidor remoto, ahora si ejecutas algún servicio que use el puerto `8000`, en el navegador de tu equipo local podras ingresar a `127.0.0.1:8000` y ver la pagina o proyecto.
+
+Esto es útil con base de datos, ya que por defecto está deshabilitado el acceso remoto. Ahora podrías usar el usario, contraseña y la url de la base de datos `127.0.0.1:3036` en MySQL o DBeaver.
+
+**Remote tunnel:** el servidor remoto permite exponer un puerto del equipo local al exterior, ejemplo: equipo local `A` tiene bloqueo por ISP y quiere exponer una página web que usa el puerto `8080`, equipo remoto `B` tiene IP publica y acceso al exterior, entonces tomara el puero `8080` y lo expondra en `ip_public:8081`.
+```bash
+# ssh -R remoteport:ip_local:localport server@ip_public
+ssh -R 8081:192.168.0.100:8080 bender@192.168.0.10
+```
+Para que este paso surta efecto, se debe modificar el archivo /etc/ssh/sshd_config.
+```bash
+# línea a editar
+GatewayPorts yes
+```
+Ahora desde el navegador podras hacer un http://ip_public:8081.
