@@ -5,7 +5,7 @@ Instalación, configuración y actualización del sistema.
 ```bash
 sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y  
 ```
-Crear un usuario con directorio para un usar el usuario `root`.
+Crear un usuario con directorio para no usar el usuario `root`.
 ```bash
 sudo useradd -m bender
 ```
@@ -25,6 +25,18 @@ Task:
 ssh bender@192.168.0.10
 ```
 Generar llaves para acceder sin contraseña.
+
+En el equipo local **no el remoto**. 
+
+Primero validar si existe tu directorio `.ssh`, que es donde se guardan las llaves publicas y privadas.
+```bash
+ls ~/.ssh
+# si no existe, la podemos crear
+mkdir /home/user/.ssh
+# nos movemos al directorio
+cd ~/.ssh
+```
+Generear las llaves.
 ```bash
 ssh-keygen -t rsa -b 4096 -C "mimail@mail.com"
 ```
