@@ -26,8 +26,7 @@ ssh bender@192.168.0.10
 ```
 Generar llaves para acceder sin contraseña.
 
-En el equipo local **no el remoto**. 
-
+En el equipo local **no el remoto**.  
 Primero validar si existe tu directorio `.ssh`, que es donde se guardan las llaves publicas y privadas.
 ```bash
 ls ~/.ssh
