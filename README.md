@@ -245,7 +245,7 @@ Comprobar los permisos de `/etc/shadow` con `ls -l`.
 irw-r----- 1 root shadow 1299 oct 31 02:51 /etc/shadow
 
 # usar cat para mostrar el contenido del archivo
-cat /etc/shadow # lo cual retorna Periso denegado
+cat /etc/shadow # lo cual retorna Permiso denegado
 # usar sudo
 sudo cat /etc/shadow
 # less: muestra página a página el contendio del archivo
