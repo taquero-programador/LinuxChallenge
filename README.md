@@ -15,10 +15,6 @@ sudo passwd bender
 ```
 
 ## Day 1
-Task:
-- [x] Conectar e iniciar sesión en el servidor.
-- [x] Ejecutar comandos simples para ver el estado del servidor.
-- [x] Cambiar la contraseña
 
 #### Usar `SSH` para acceder al servidor
 ```bash
@@ -144,3 +140,99 @@ Host github
     IdentityFile ~/.ssh/github
 ```
 Cuando hagas un `git clone  git@github.com:taquero-programador/LinuxChallenge.git` cambia github.com por github, que es el valor de tu primera línea en `Host github`; después de eso no hay nada más que hacer.
+
+## Day 2
+
+Acceder al servidor y ejecutar comandos.
+```bash
+ssh bender
+
+# saber la ubicación actual
+pwd
+# retorna
+/home/bender
+
+# listar los directorios y archivos de la ubicación actual
+ls
+
+# crear un par de archivos
+touch test{1..3}.txt
+ls
+# retorna
+test1.txt  test2.txt  test3.txt
+
+# listar las diferentes opciones a usar con ls
+ls --help
+
+# formato largo
+ls -l
+# a or all, muestra todos los archivos y directorio, incluye los ocultos
+ls -a
+# -R lista de manera recursiva
+ls -Ra
+
+# es posible usarlo con otros directorios
+ls ~/.ssh
+
+# crear directorios
+mkdir dir{1..3}
+# crear archivos dentro de los directorios
+touch dir{1..3}/test{a,b,c}
+
+# moverse entre directorios
+cd dir1
+pwd
+/home/bender/Documentos/dir1
+cd /var/log
+pwd
+
+# directorio raíz
+cd /
+# retrovecer un nivel
+cd ..
+
+# usar -ltr l: formato largo, t: por fecha (primero los nuevos), (r): recursivo
+ls -ltr
+
+# colorear la salida
+ls -lh --color=auto
+```
+
+#### PS1, PS1, PS3, PS4 Y PROMPT_COMMAND
+
+**PS1:** mostrar el nombre de usuario, host y directorio de trabajo
+```bash
+export PS1="\u@\h \w> "
+```
+- \u - nombre de usuario.
+- \h - nombre de host.
+- \w - nombre completo del directorio actual.
+
+**PS2:** aviso interactivo de continación. Cambiar esto `>` por `continue->`
+```bash
+export PS2="continue->"
+```
+
+**PS3:** utilizada para "seleccionar" dentro del script shell
+```sh
+select i in mon tue wed exit
+do
+  case $i in
+    mon) echo "Monday";;
+    tue) echo "Tuesday";;
+    wed) echo "Wednesday";;
+    exit) exit;;
+  esac
+done
+```
+Añadir permisos de lectura y escritura `sudo chmod +x ps3.sh`.
+
+**PS4:** utilizado por "set-x" para prefijar la salida del seguimiento
+```sh
+set -x
+echo "PS4 demo script"
+ls -l /etc/ | wc -l
+du -sh ~
+```
+
+**PROMPT_COMMAND:** `export PROMPT_COMMAND="date +%k:%m:%S"` 
