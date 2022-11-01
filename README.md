@@ -120,7 +120,7 @@ Host my_lab # my_lab sera el nombre a usar para la conexión SSH
 ```
 Ahora para la conexión, en lugar de hacer un `ssh bender@192.168.10` basta con `ssh bender`
 
-Si quieras añadir otro perfil, por ejemplo para github.
+Si quieras añadir otro perfil; por ejemplo, para github.
 ```bash
 # server lab
 Host my_lab
@@ -235,4 +235,45 @@ ls -l /etc/ | wc -l
 du -sh ~
 ```
 
-**PROMPT_COMMAND:** `export PROMPT_COMMAND="date +%k:%m:%S"` 
+**PROMPT_COMMAND:** `export PROMPT_COMMAND="date +%k:%m:%S"`
+
+## Day 3
+
+Comprobar los permisos de `/etc/shadow` con `ls -l`.
+```bash
+# ver los permisos de archivo
+irw-r----- 1 root shadow 1299 oct 31 02:51 /etc/shadow
+
+# usar cat para mostrar el contenido del archivo
+cat /etc/shadow # lo cual retorna Periso denegado
+# usar sudo
+sudo cat /etc/shadow
+# less: muestra página a página el contendio del archivo
+sudo less /etc/shadow
+# usar nano, aunque a estas alturas prefiero VIM
+sudo vim /etc/shadow
+
+# reiniciar el servidor con reboot
+sudo reboot
+# revisar que se encuentre activo con uptime
+uptime # muestra la hora actual, tiempo de actividad, usuarios activos, etc
+
+sudo -i
+# salir con exit o logout
+exit
+
+# ver el archivo /var/log/auth.log, donde se lleva un registro de sudo
+sudo less var/log/auth.log
+
+# filtrar usando grep
+sudo grep 'sudo' /var/log/auth.log
+
+# cambiar el nombre del host con hostnamectl
+sudo hostnamectl set-hostname debian-power
+
+# trabajar con la zona horaria timedateclt
+# listar todas las zonas horarias disponibles
+timedateclt list-timezones
+# cambiar
+sudo timedateclt set-timezone America/Monterrey
+```
