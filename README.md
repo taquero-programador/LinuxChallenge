@@ -208,7 +208,7 @@ export PS1="\u@\h \w> "
 - \h - nombre de host.
 - \w - nombre completo del directorio actual.
 
-**PS2:** aviso interactivo de continación. Cambiar esto `>` por `continue->`
+**PS2:** aviso interactivo de continuación. Cambiar esto `>` por `continue->`
 ```bash
 export PS2="continue->"
 ```
