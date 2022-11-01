@@ -117,7 +117,7 @@ Añadir un perfil al archivo de configuración, en este caso para acceder al ser
 Host my_lab # my_lab sera el nombre a usar para la conexión SSH
     HostName 192.168.0.10 # ip local o public
     User bender # usuario real del servidor remoto
-    Port 1022 # si tiene el puerto por defecto (22), no necesitas ponerlo
+    Port 1022 # no necesario si tiene el puerto por defecto (22)
     AddKeysToAgent yes # añade las llaves al agente ssh
     IdentitiesOnly yes
     IdentityFile ~/.ssh/my_lab # ubicación de la llave
