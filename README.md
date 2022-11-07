@@ -13,6 +13,14 @@ Crear una contraseña para el nuevo usuario.
 ```bash
 sudo passwd bender
 ```
+Es mejor usar `adduser`, es mas intuitivo, creá usario, directorio y solicita una contraseña.
+```bash
+sudo adduser bender
+```
+Añadir usuario a los grupos _sudo_ y _adm_.
+```bash
+sudo usermod -a -G adm,sudo bender
+```
 
 ## Day 1
 
