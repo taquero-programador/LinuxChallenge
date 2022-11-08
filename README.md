@@ -329,7 +329,7 @@ Contiene los binarios de usuario esenciales (programas) que deben estar presente
 Contiene los archivos necesarios para iniciar el sistema; por ejemplo, el cargador de inicio de GRUB y sus Kernels de Linux se almacena ahí. Los archivos de configuración se encuentran en `/etc`.
 
 **`/cdrom` - Punto de monjate historico para CD-ROM**  
-Es una ubicación temporal para los CD-ROM insertados en el sistema. La ubicación estandar de los medios temporales están en `/media`.
+Es una ubicación temporal para los CD-ROM insertados en el sistema. La ubicación estándar de los medios temporales están en `/media`.
 
 **`/dev` - Archivos de dispositivos**  
 Linux exponse los dispositivos como archivos y el directorio `/dev` contiene varios archivos especiales que representan dispositivos. No son archivos, pero aparecen archivos; por ejemplo, `/dev/sda` representa la primera unidad SATA del sistema.
@@ -346,6 +346,44 @@ Contiene una carpeta de inicio para cada usuario. Por ejemplo, `/home/bender`, c
 Contiene las bibliotecas que necesitan los binarios esenciales en las carpetas `/bin` y `/sbin`. Las Bibliotecas en la carpeta `/usr/bin` se encuentran en `/usr/lib`.
 
 **`/lost+found` - Archivos recuperados**  
-Si es sistema de archivos falla
+Si es sistema de archivos falla, se realiza una verificación del sistema de archivos en el próximo arranque. Todos los archivos dañados se encuentran en ese directorio, por lo se puede intentar recuperar la mayor cantidad de datos posibles.
+
+**`/media` - Medios extraibles**  
+Contiene subdirectorios de los dispositivos de medios extraibles insertados en la computadora. Por ejemplo, al insertar un CD, se creará un directorio dentro de `/media`, desde ahí se puede acceder al contenido dentro de CD.
+
+**`/mnt` - Punto de montaje temporales**  
+Por ejemplo, si está montando una partición Windows para realizar alguna recuperación, puede montarla en `/mnt/windows`. Sin embargo puede montar el sistema de archivos en cualquier parte del sistema.
+
+**`/opt` - Paquetes opcionales**  
+Subdirectorio para paquetes de software opcionales. Es comúnmente usado para software propietario que no obedece la jerarquía estándar del sistema de archivos; por ejemplo, `/opt/application`.
+
+**`proc` - Archivos de proceso y Kernel**  
+Es similar a `/dev` porque no contiene archivos estándar. Contiene archivos especiales que representan información del sistema y del proceso.
+
+**`/root` - Directorio de inicio root**  
+Es el directorio de inicio para el usuario root. En lugar de estar ubicado en `/home/root` está en `/root`. Esto es distinto a `/`, que es el directorio raíz del sistema.
+
+**`/run` - Archivos de estado de aplicación**  
+Es bastane nuevo y brinda a las aplicaciones un lugar estándar para almacenar los archivos transitorios que requieran, como sockets e ID's de procesos. No se pueden almacenar en `/tmp` porque los archivos en ese directorio se pueden eliminar.
+
+**`/sbin` - Binarios de adminstración de sistema**  
+Es similar a `/bin`. Contiene binarios esenciales que generalmente están destinado a ser ejecutados por el usuario root para la administración del sistema.
+
+**`/selinux` - Sistema de archivos virtuales SELinux**  
+Sistema Linux para la seguridad (Fedora, Red Hat, etc.) contiene archivos especiales para selinux.
+
+**`/srv` - Datos de servicio**  
+Contiene "datos para los servicios proporcionados por el sistema". Un servidor Apache HTTP, probablemente almacenaría los archivos en `/srv`.
+
+**`/tmp` - Archivos temporales**  
+Estos archivos generalmente se eliminan al reiniciar el sistema y pueden eliminarse en cualquier otro momento usando algo como tmpwatch.
+
+**`/usr` - Binarios de usuario y datos de solo lectura**  
+Contiene aplicaciones y archivos utilizados por el usuario. Por ejemplo, las aplicaciones no esenciales se encuentran en `/usr/bin` en lugar de `/bin` y los binarios de administración del sistema no esenciales están en `/usr/sbin` en lugar de `/sbin`. Las bibliotecas para cada uno se encuentra en `/usr/lib`. Este directorio también contiene otros directorio; por ejemplo, archivos de la arquitectura, como los gráficos, se encuentran en `/usr/share`.
+
+El directorio `/usr/local` es donde las aplicaciones compiladas localmente se instalan de forma predeterminada; esto evita que estropeen el resto del sistema.
+
+**`/var` - ARchivos de datos variables**  
+Es la contrapartida grabable  de `/usr`, que debe ser de solo lectura. Los archivos de registro y todo lo demás que normalmente se escribiría en `/usr` durante el funcionamiento normal se escriben en el directorio `/var`.
 
 ## Day 5
