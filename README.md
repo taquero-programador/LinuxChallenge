@@ -23,6 +23,7 @@ sudo usermod -a -G adm,sudo bender
 ```
 
 ## Day 1
+Conociendo el servidor
 
 #### Usar `SSH` para acceder al servidor
 ```bash
@@ -150,6 +151,7 @@ Host github
 Cuando hagas un `git clone  git@github.com:taquero-programador/LinuxChallenge.git` cambia github.com por github, que es el valor de tu primera línea en `Host github`; después de eso no hay nada más que hacer.
 
 ## Day 2
+Navegación básica
 
 Acceder al servidor y ejecutar comandos.
 ```bash
@@ -285,3 +287,27 @@ timedateclt list-timezones
 # cambiar
 sudo timedateclt set-timezone America/Monterrey
 ```
+
+## Day 4
+Instalación de software, exploración de la estructura de datos
+
+Buscar el software a instalar.
+```bash
+apt search mc
+```
+Instalar.
+```bash
+sudo apt install mc -y
+```
+
+#### apt and apt-get
+apt se introdujo por primera vez en Debian, el cual se introdujo para algunos problemas de apt-get. En pocas palabras apt tiene muchas similitudes con apt-get, haciendolo más amigable y eficiente.
+
+#### DNF and apt
+DNF es el gestor de paquetes y front-end para RMP. apt es para dpkg.
+APT | DNF
+-- | --
+trabaja con .deb | trabaja con .rpm
+front-end para dpkg | front-end para RPM
+
+## Day 5
