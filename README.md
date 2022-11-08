@@ -336,13 +336,13 @@ Linux exponse los dispositivos como archivos y el directorio `/dev` contiene var
 
 `/dev/random` produce números aleatorios. `/dev/null` no produce ningún resultado.
 
-**`/etc` - Archivos de configuración**
+**`/etc` - Archivos de configuración**  
 Contiene archivos de configuración, que generalmente se pueden editar a mano con algún editor de textos. Tiene los archivos de configuración de todo el sistema, los archivos para el usuario se encuentran en el directorio de inicio.
 
-**`/home` - Carpetas de inicio** 
+**`/home` - Carpetas de inicio**  
 Contiene una carpeta de inicio para cada usuario. Por ejemplo, `/home/bender`, cada usuario tiene permisos de escritura y para modificaciones más elevendas necesita acceso root.
 
-**`/lib` - Bibliotecas compartidas esenciales** 
+**`/lib` - Bibliotecas compartidas esenciales**   
 Contiene las bibliotecas que necesitan los binarios esenciales en las carpetas `/bin` y `/sbin`. Las Bibliotecas en la carpeta `/usr/bin` se encuentran en `/usr/lib`.
 
 **`/lost+found` - Archivos recuperados**  
