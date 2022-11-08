@@ -303,11 +303,26 @@ sudo apt install mc -y
 #### apt and apt-get
 apt se introdujo por primera vez en Debian, el cual se introdujo para algunos problemas de apt-get. En pocas palabras apt tiene muchas similitudes con apt-get, haciendolo más amigable y eficiente.
 
-#### DNF and apt
-DNF es el gestor de paquetes y front-end para RMP. apt es para dpkg.
+#### DNF and APT
 APT | DNF
 -- | --
 trabaja con .deb | trabaja con .rpm
 front-end para dpkg | front-end para RPM
+actualización de repos manualmente | actualización de repos automáticamente
+se introdujo en Debian | se introdujo en Fedora
+en Debian, Ubuntu, etc. | RHEL, CentOS, Fedora, etc.
+más rapido que dnf | lento
+necesita un .deb para instalar | se puede instalar desde una url
+instalación a un solo click | no disponible
+
+#### Package managment ATP
+[Enlace APT](https://ubuntu.com/server/docs/package-management)
+
+#### Sistema de directorios Linu
+#### `/` - El directorio root (raíz)
+Toto en el sistema se encuentra en `/`. Podría pensar que es similar a `C:\` de Windows.
+
+#### `/bin` - Binarios de usuario esenciales
+Contiene los binarios
 
 ## Day 5
