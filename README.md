@@ -323,7 +323,7 @@ instalación a un solo click | no disponible
 Todo en el sistema se encuentra en `/`. Podría pensar que es similar a `C:\` de Windows.
 
 **`/bin` - Binarios de usuario esenciales**  
-Contiene los binarios de usuario esenciales (programas) que deben estar presentes cuando el sistema se monta en modo usuario único. Las aplicaciones com Firefox se almacenan en `/usr/bin`, mientras que los programas y utilidades del sistema como shell se almacen en `/bin`. El directorio `/usr` puede almacenarse en otras partición.
+Contiene los binarios de usuario esenciales (programas) que deben estar presentes cuando el sistema se monta en modo usuario único. Las aplicaciones como Firefox se almacenan en `/usr/bin`, mientras que los programas y utilidades del sistema como shell se almacen en `/bin`. El directorio `/usr` puede almacenarse en otras partición.
 
 **`/boot` - Archivos de arranque estaticos**  
 Contiene los archivos necesarios para iniciar el sistema; por ejemplo, el cargador de inicio de GRUB y sus Kernels de Linux se almacena ahí. Los archivos de configuración se encuentran en `/etc`.
@@ -332,7 +332,7 @@ Contiene los archivos necesarios para iniciar el sistema; por ejemplo, el cargad
 Es una ubicación temporal para los CD-ROM insertados en el sistema. La ubicación estándar de los medios temporales están en `/media`.
 
 **`/dev` - Archivos de dispositivos**  
-Linux exponse los dispositivos como archivos y el directorio `/dev` contiene varios archivos especiales que representan dispositivos. No son archivos, pero aparecen archivos; por ejemplo, `/dev/sda` representa la primera unidad SATA del sistema.
+Linux exponse los dispositivos como archivos y el directorio `/dev` contiene varios archivos especiales que representan dispositivos. No son archivos, pero parecen archivos; por ejemplo, `/dev/sda` representa la primera unidad SATA del sistema.
 
 `/dev/random` produce números aleatorios. `/dev/null` no produce ningún resultado.
 
@@ -346,7 +346,7 @@ Contiene una carpeta de inicio para cada usuario. Por ejemplo, `/home/bender`, c
 Contiene las bibliotecas que necesitan los binarios esenciales en las carpetas `/bin` y `/sbin`. Las Bibliotecas en la carpeta `/usr/bin` se encuentran en `/usr/lib`.
 
 **`/lost+found` - Archivos recuperados**  
-Si es sistema de archivos falla, se realiza una verificación del sistema de archivos en el próximo arranque. Todos los archivos dañados se encuentran en ese directorio, por lo se puede intentar recuperar la mayor cantidad de datos posibles.
+Si es sistema de archivos falla, se realiza una verificación del sistema de archivos en el próximo arranque. Todos los archivos dañados se encuentran en ese directorio, por lo que se puede intentar recuperar la mayor cantidad de datos posibles.
 
 **`/media` - Medios extraibles**  
 Contiene subdirectorios de los dispositivos de medios extraibles insertados en la computadora. Por ejemplo, al insertar un CD, se creará un directorio dentro de `/media`, desde ahí se puede acceder al contenido dentro de CD.
@@ -383,7 +383,7 @@ Contiene aplicaciones y archivos utilizados por el usuario. Por ejemplo, las apl
 
 El directorio `/usr/local` es donde las aplicaciones compiladas localmente se instalan de forma predeterminada; esto evita que estropeen el resto del sistema.
 
-**`/var` - ARchivos de datos variables**  
+**`/var` - Archivos de datos variables**  
 Es la contrapartida grabable  de `/usr`, que debe ser de solo lectura. Los archivos de registro y todo lo demás que normalmente se escribiría en `/usr` durante el funcionamiento normal se escriben en el directorio `/var`.
 
 ## Day 5
