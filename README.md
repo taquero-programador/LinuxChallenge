@@ -301,7 +301,7 @@ sudo apt install mc -y
 ```
 
 #### apt and apt-get
-apt se introdujo por primera vez en Debian, el cual se introdujo para algunos problemas de apt-get. En pocas palabras apt tiene muchas similitudes con apt-get, haciendolo más amigable y eficiente.
+apt se introdujo por primera vez en Debian, el cual se introdujo para resolver algunos problemas de apt-get. En pocas palabras apt tiene muchas similitudes con apt-get, haciendolo más amigable y eficiente.
 
 #### DNF and APT
 APT | DNF
@@ -315,14 +315,14 @@ más rapido que dnf | lento
 necesita un .deb para instalar | se puede instalar desde una url
 instalación a un solo click | no disponible
 
-#### Package managment ATP
+#### Package managment APT
 [Enlace APT](https://ubuntu.com/server/docs/package-management)
 
-#### Sistema de directorios Linu
+#### Sistema de directorios Linux
 #### `/` - El directorio root (raíz)
-Toto en el sistema se encuentra en `/`. Podría pensar que es similar a `C:\` de Windows.
+Todo en el sistema se encuentra en `/`. Podría pensar que es similar a `C:\` de Windows.
 
-#### `/bin` - Binarios de usuario esenciales
-Contiene los binarios
+### `/bin` - Binarios de usuario esenciales
+Contiene los binarios 
 
 ## Day 5
