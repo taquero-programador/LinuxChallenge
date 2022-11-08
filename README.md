@@ -319,33 +319,33 @@ instalación a un solo click | no disponible
 [Enlace APT](https://ubuntu.com/server/docs/package-management)
 ***
 #### Sistema de directorios Linux
-#### `/` - El directorio root (raíz)
+**`/` - El directorio root (raíz)**  
 Todo en el sistema se encuentra en `/`. Podría pensar que es similar a `C:\` de Windows.
 
-#### `/bin` - Binarios de usuario esenciales
+**`/bin` - Binarios de usuario esenciales**  
 Contiene los binarios de usuario esenciales (programas) que deben estar presentes cuando el sistema se monta en modo usuario único. Las aplicaciones com Firefox se almacenan en `/usr/bin`, mientras que los programas y utilidades del sistema como shell se almacen en `/bin`. El directorio `/usr` puede almacenarse en otras partición.
 
-#### `/boot` - Archivos de arranque estaticos
+**`/boot` - Archivos de arranque estaticos**  
 Contiene los archivos necesarios para iniciar el sistema; por ejemplo, el cargador de inicio de GRUB y sus Kernels de Linux se almacena ahí. Los archivos de configuración se encuentran en `/etc`.
 
-#### `/cdrom` - Punto de monjate historico para CD-ROM
+**`/cdrom` - Punto de monjate historico para CD-ROM**  
 Es una ubicación temporal para los CD-ROM insertados en el sistema. La ubicación estandar de los medios temporales están en `/media`.
 
-#### `/dev` - Archivos de dispositivos
+**`/dev` - Archivos de dispositivos**  
 Linux exponse los dispositivos como archivos y el directorio `/dev` contiene varios archivos especiales que representan dispositivos. No son archivos, pero aparecen archivos; por ejemplo, `/dev/sda` representa la primera unidad SATA del sistema.
 
 `/dev/random` produce números aleatorios. `/dev/null` no produce ningún resultado.
 
-#### `/etc` - Archivos de configuración
+**`/etc` - Archivos de configuración**
 Contiene archivos de configuración, que generalmente se pueden editar a mano con algún editor de textos. Tiene los archivos de configuración de todo el sistema, los archivos para el usuario se encuentran en el directorio de inicio.
 
-#### `/home` - Carpetas de inicio
+**`/home` - Carpetas de inicio** 
 Contiene una carpeta de inicio para cada usuario. Por ejemplo, `/home/bender`, cada usuario tiene permisos de escritura y para modificaciones más elevendas necesita acceso root.
 
-#### `/lib` - Bibliotecas compartidas esenciales
+**`/lib` - Bibliotecas compartidas esenciales** 
 Contiene las bibliotecas que necesitan los binarios esenciales en las carpetas `/bin` y `/sbin`. Las Bibliotecas en la carpeta `/usr/bin` se encuentran en `/usr/lib`.
 
-#### `/lost+found` - Archivos recuperados
+**`/lost+found` - Archivos recuperados**  
 Si es sistema de archivos falla
 
 ## Day 5
