@@ -292,8 +292,7 @@ timedateclt list-timezones
 sudo timedateclt set-timezone America/Monterrey
 ```
 
-## Day 4
-Instalación de software, exploración de la estructura de datos
+## Day 4 - Instalación de software, exploración de la estructura de datos
 
 Buscar el software a instalar.
 ```bash
@@ -390,8 +389,7 @@ El directorio `/usr/local` es donde las aplicaciones compiladas localmente se in
 **`/var` - Archivos de datos variables**  
 Es la contrapartida grabable  de `/usr`, que debe ser de solo lectura. Los archivos de registro y todo lo demás que normalmente se escribiría en `/usr` durante el funcionamiento normal se escriben en el directorio `/var`.
 
-## Day 5
-More or less
+## Day 5 - More or less
 
 **less:** muestra página por página el contenido de un fichero.
 ```bash
@@ -444,8 +442,7 @@ SAVEHIST=10000000
 ```
 [Referencía](https://www.digitalocean.com/community/tutorials/how-to-use-bash-history-commands-and-expansions-on-a-linux-vps).
 
-## Day 6
-VIM
+## Day 6 - VIM
 
 Crear un archivo:
 ```bash
@@ -455,3 +452,15 @@ cp -v /etc/services testfile
 vim testfile
 ```
 [VIM adventures](vim-adventures.com).
+
+## Day 7 - El servidor y sus servicios
+
+- Actualizar la lista de paquetes `sudo apt update`.
+- Instalar apache `sudo apt install apache2`.
+- Validar que el servicio esté arriba `localhost`, `192.168.0.10` or `curl -I localhost`.
+- Intentar detener el servicio `susy stop apache2`.
+- Abrir archivo de configuración `sudo vim /etc/apache2/apache2.conf`.
+- Ver el archivo `sudo vim /var/log/apache2/access.log` y `sudo vim /var/log/apache2/error.log`.
+
+#### Recursos
+[HTTP](https://ubuntu.com/server/docs/web-servers-apache).
