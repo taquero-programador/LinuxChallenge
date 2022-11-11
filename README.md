@@ -400,11 +400,11 @@ sudo less /var/log/auth.log
 Comandos básicos:
 - `g`: se va al inicio del documento.
 - `G`: al final del documento.
-- `/`: para realizar busquedas, después se preciona `enter`.
+- `/`: para realizar busquedas, después se presiona `enter`.
 - `n`: para el siguiente resultado.
 - `N`: resultado anterior.
 - `h`: muestra la ayuda.
-- `less file1 file2`: abrir más en un archivo.
+- `less file1 file2`: abrir más de un archivo.
 - `:e file1`: abre uno de los archivos con less.
 - `:n`: ir al siguiente archivo.
 - `:p`: ir al archivo anterior.
