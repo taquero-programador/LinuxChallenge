@@ -21,6 +21,10 @@ Añadir usuario a los grupos _sudo_ y _adm_.
 ```bash
 sudo usermod -a -G adm,sudo bender
 ```
+Eliminar usuario de un determinado grupo.
+```bash
+sudo deluser bender sudo
+```
 
 ## Day 1
 Conociendo el servidor
