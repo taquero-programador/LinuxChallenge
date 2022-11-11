@@ -336,7 +336,7 @@ Contiene los archivos necesarios para iniciar el sistema; por ejemplo, el cargad
 Es una ubicación temporal para los CD-ROM insertados en el sistema. La ubicación estándar de los medios temporales están en `/media`.
 
 **`/dev` - Archivos de dispositivos**  
-Linux exponse los dispositivos como archivos y el directorio `/dev` contiene varios archivos especiales que representan dispositivos. No son archivos, pero parecen archivos; por ejemplo, `/dev/sda` representa la primera unidad SATA del sistema.
+Linux exponse los dispositivos como archivos y el directorio `/dev` contiene varios archivos especiales que representán dispositivos. No son archivos, pero parecen archivos; por ejemplo, `/dev/sda` representa la primera unidad SATA del sistema.
 
 `/dev/random` produce números aleatorios. `/dev/null` no produce ningún resultado.
 
@@ -362,7 +362,7 @@ Por ejemplo, si está montando una partición Windows para realizar alguna recup
 Subdirectorio para paquetes de software opcionales. Es comúnmente usado para software propietario que no obedece la jerarquía estándar del sistema de archivos; por ejemplo, `/opt/application`.
 
 **`proc` - Archivos de proceso y Kernel**  
-Es similar a `/dev` porque no contiene archivos estándar. Contiene archivos especiales que representan información del sistema y del proceso.
+Es similar a `/dev` porque no contiene archivos estándar. Contiene archivos especiales que representán información del sistema y del proceso.
 
 **`/root` - Directorio de inicio root**  
 Es el directorio de inicio para el usuario root. En lugar de estar ubicado en `/home/root` está en `/root`. Esto es distinto a `/`, que es el directorio raíz del sistema.
@@ -391,3 +391,55 @@ El directorio `/usr/local` es donde las aplicaciones compiladas localmente se in
 Es la contrapartida grabable  de `/usr`, que debe ser de solo lectura. Los archivos de registro y todo lo demás que normalmente se escribiría en `/usr` durante el funcionamiento normal se escriben en el directorio `/var`.
 
 ## Day 5
+More or less
+
+**less:** muestra página por página el contenido de un fichero.
+```bash
+sudo less /var/log/auth.log
+```
+Comandos básicos:
+- `g`: se va al inicio del documento.
+- `G`: al final del documento.
+- `/`: para realizar busquedas, después se preciona `enter`.
+- `n`: para el siguiente resultado.
+- `N`: resultado anterior.
+- `h`: muestra la ayuda.
+- `less file1 file2`: abrir más en un archivo.
+- `:e file1`: abre uno de los archivos con less.
+- `:n`: ir al siguiente archivo.
+- `:p`: ir al archivo anterior.
+
+#### History
+El comando `history` lista todos los comandos ejecutados en la terminal.
+```bash
+# listar todos los comandos ejecutados
+history
+```
+Usando `!` junto a un número traera/ejecutara el comando del historial.
+```bash
+!20
+```
+Con la combinación `ctrl + r`, permite realizar una busqueda en el hisorial de comandos minestras se escibre. Con `!!` trae/ejecuta el último comando. `!sudo` ejecuta el último comando con `sudo`. `sudo !!` ejecuta el último comando usando permisos `sudo`.
+
+Ver el historial del archivo `.bash_history` o `.zsh_history`.
+```bash
+less ~/.zsh_history
+```
+Usar nano o VIM para abrir un archivo.
+```bash
+vim ~/.zsh_history
+```
+
+#### Archivo y comandos de historial
+Modificar el archivo `.bashrc` o `.zshrc` para ampliar el almacenamiento de historial. En `bashrc` basta con añadir:
+```bash
+HISTSIZE=10000000
+SAVEHIST=10000000
+```
+Mientras que en `.zshrc`:
+```bash
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=10000000
+SAVEHIST=10000000
+```
+[Referencía](https://www.digitalocean.com/community/tutorials/how-to-use-bash-history-commands-and-expansions-on-a-linux-vps).
