@@ -443,3 +443,15 @@ HISTSIZE=10000000
 SAVEHIST=10000000
 ```
 [Referencía](https://www.digitalocean.com/community/tutorials/how-to-use-bash-history-commands-and-expansions-on-a-linux-vps).
+
+## Day 6
+VIM
+
+Crear un archivo:
+```bash
+cp -v /etc/services testfile
+
+# abrir un archivo
+vim testfile
+```
+[VIM adventures](vim-adventures.com).
