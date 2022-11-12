@@ -464,3 +464,22 @@ vim testfile
 
 #### Recursos
 [HTTP](https://ubuntu.com/server/docs/web-servers-apache).
+
+## Day 8 - grep y otros procesadores de texto
+
+Ahora que el servidor ejecuta servicios, genera registros a medida que accede al servidor, y estos son archivos que se pueden analizar.
+
+- Usar `cat` para mostrar todo el contenido de `access.log`, `sudo cat /var/log/apache2/access.log`.
+- `tac` es similar a `cat`, pero la última línea en consola es la primera del archivo.
+- `head` muestra solo las primeras líneas del archivo, con `-n` permite monstrar solo el número de líneas pasadas como argumento.
+- `tail`es a la inversa de `head`, lo cual solo muestra las últimas líneas del archivo y también permite pasar el número de líneas a mostrar con `-n`. `-f` permite mantener el archivo abierto y recuperar los nuevos logs sobre la marcha.
+- Usar `sudo cat /var/log/apache2/access.log | grep -i "auth"`.
+- `wc -l file`.
+- Usar `cut` con delimitador `-d`; campo `-f`: ejemplo, `sudo cat /var/log/apache2/access.log | grep -i "auth" | cut -f 10- -d " "`, campo 10 en adelante y el delimitador es " ".
+- Redireccionar la salida a un archivo, `sudo cat /var/log/apache2/access.log | grep -i "root" > output.txt`.
+- `cut -d":" -f5 /etc/pass`, retorna solo los nombre de usario que están después del campo 5 que está delimitado por ":". `cut` corta y solo trae el valor requerido.
+- Obtener solo las direcciones IP's del archivo `auth.lo`, ejemplo, `sudo cat /var/log/auth.log | grep -o "[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}"`. Con `-o` solo retorna la concidencia exacta.
+- Usar `sort | uniq`, sort ordena y uniq devuelve únicos.
+- `-n` muestra el número de la línea dentro del archivo.
+
+Searchs "linux sed tricks" and "awk one liners". [grep](https://ostechnix.com/the-grep-command-tutorial-with-examples-for-beginners/).
