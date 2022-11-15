@@ -513,7 +513,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.38 seconds
 ```
 
 #### Sevidor de seguridad del anfritrion
-Enumerara la regas vigentes con `sudo iptable -L`.
+Enumera la regas vigentes con `sudo iptable -L`.
 ```bash
 # habilitar un servicio con ufw
 sudo ufw allow ssh
@@ -581,7 +581,7 @@ man ss
 ```
 
 #### UFW
-UFW es una herramienta de cortafuegos que facilita la configuracion con iptables.
+UFW es una herramienta de cortafuegos que facilita la configuración con iptables.
 ```bash
 # demonio
 sudo systemctl status ufw
@@ -620,7 +620,7 @@ sudo ufw deny 93/tcp
 sudo ufw delete deny 93/tcp
 ```
 
-Se puede permitir o denegar un servico, ya que ufw lee en `/etc/services`. Ejemplo, `sudo ufw allos https`.
+Se puede permitir o denegar un servico con nombre, ya que ufw lee en `/etc/services`. Ejemplo, `sudo ufw allow https`.
 ```bash
 Allow
 # permitir una IP especifica
