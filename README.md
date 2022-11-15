@@ -649,4 +649,4 @@ sudo ufw deny from 192.168.0.100 to any port 22
 #### Netstat
 [Source](https://www.thegeekstuff.com/2010/03/netstat-command-examples/).
 
-## Day 10
+## Day 10 - Hacer que la computadora haga el trabajo por ti
