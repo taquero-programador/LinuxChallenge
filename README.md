@@ -485,3 +485,168 @@ Ahora que el servidor ejecuta servicios, genera registros a medida que accede al
 Searchs "linux sed tricks" and "awk one liners". [grep](https://ostechnix.com/the-grep-command-tutorial-with-examples-for-beginners/).
 
 ## Day 9 - Buceando en la red
+
+Usar un par de comandos para ver los puertos abiertos en el servidor.
+
+- `netstat` comprueba el estado de las interfaces. Con `netstat -l` lista los puertos que están escuchando.
+- `ss` "estado de socket", es una utilidad estándar. reemplazando `netstat`, usar `ss -ltp`.
+```bash
+State     Recv-Q    Send-Q       Local Address:Port         Peer Address:Port    Process
+LISTEN    0         16                 0.0.0.0:8200              0.0.0.0:*
+LISTEN    0         128                0.0.0.0:10222             0.0.0.0:*
+LISTEN    0         128              127.0.0.1:ipp               0.0.0.0:*
+LISTEN    0         128                   [::]:10222                [::]:*
+LISTEN    0         128                  [::1]:ipp                  [::]:*
+```
+- `nmap` permite escanear puertos, no viene de manera predeterminada `sudo apt install namp -y`. Ver los puertos abiertos en el servidor `nmap localhost`.
+```bash
+Starting Nmap 7.80 ( https://nmap.org ) at 2022-11-14 22:07 CST
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.00064s latency).
+Other addresses for localhost (not scanned): ::1
+Not shown: 998 closed ports
+PORT     STATE SERVICE
+631/tcp  open  ipp
+8200/tcp open  trivnet1
+
+Nmap done: 1 IP address (1 host up) scanned in 0.38 seconds
+```
+
+#### Sevidor de seguridad del anfritrion
+Enumerara la regas vigentes con `sudo iptable -L`.
+```bash
+# habilitar un servicio con ufw
+sudo ufw allow ssh
+# en mi caso es otro puerto
+# luego
+sudo ufw enable # después de cada cambio
+```
+
+#### Uso de puertos no estándar
+Es recomendable cambiar los puertos de los servicos, por ejemplo, cambiar el puerto 22 de SSH por otro.
+
+#### 12 comandos con ss
+1. Listar todas las conexiones. Enumera todas las conexión independientemente del estado en que se encuentren.
+```bash
+ss
+```
+2. Listar los puertos de escucha y no escucha.
+```bash
+ss -a
+```
+3. Listar puertos de escucha.
+```bash
+ss -l
+```
+4. Listar todas las conexiones TCP.
+```bash
+ss -t
+```
+5. Conexiones TCP de escucha.
+```bash
+ss -lt
+```
+6. Listar todas las conexiones UDP.
+```bash
+ss -ua
+```
+7. Conexiones UDP de escucha.
+```bash
+ss -lu
+```
+8. Mostrar el ID de proceso (PID) en socket.
+```bash
+ss -p
+```
+9. Monstrar estadisticas de resumen.
+```bash
+ss -s
+```
+10. Mostrar conexiones IPv4 e IPv6.
+```bash
+# ipv4
+ss -4
+# ipv6
+ss -6
+```
+11. Filtrar conexiones por número de puerto.
+```bash
+ss -at '( dport = :22 or sport = :22 )'
+# or
+ss -at '( sport = :ssh or sport = :ssh )'
+```
+12. El comando `man`.
+```bash
+man ss
+```
+
+#### UFW
+UFW es una herramienta de cortafuegos que facilita la configuracion con iptables.
+```bash
+# demonio
+sudo systemctl status ufw
+# listar puertos y ver el estatus
+sudo ufw status
+
+# listar la configuración de aplicaciones disponibles
+sudo ufw app list
+```
+
+Habilitar y deshabilitar.
+```bash
+sudo ufw enable
+# ver el estatus
+sudo ufw status verbose
+# deshabilitar
+sudo ufw disable
+```
+Permitir y denegar (UFW)
+
+La sintax básica es `sudo ufw allow/deny port/optional`.
+```bash
+# habilitar un puerto para tcp y udp
+sudo ufw allow 52
+
+# habilitar solo para tcp
+sudo ufw allow 52/tcp
+# or udp
+sudo ufw allow 52/udp
+```
+Eliminar una regla existente.
+```bash
+# primero deshabilitar
+sudo ufw deny 93/tcp
+# eliminar
+sudo ufw delete deny 93/tcp
+```
+
+Se puede permitir o denegar un servico, ya que ufw lee en `/etc/services`. Ejemplo, `sudo ufw allos https`.
+```bash
+Allow
+# permitir una IP especifica
+sudo ufw allow from 192.168.0.100
+
+# por subnet
+sudo ufw allow from 192.168.0.0/24
+
+# especificar ip y puerto
+sudo ufw allow from 192.168.0.100 to any port 22
+
+# especificar ip, puerto y protocolo
+sudo ufw allow from 192.168.0.10 to any port 22 proto tcp
+```
+Deny
+```bash
+# denegar por IP
+sudo ufw deny from 192.168.0.100
+
+# especificar ip y puerto
+sudo ufw deny from 192.168.0.100 to any port 22
+```
+
+#### IPTables
+[Source](https://linuxconfig.org/collection-of-basic-linux-firewall-iptables-rules).
+#### Netstat
+[Source](https://www.thegeekstuff.com/2010/03/netstat-command-examples/).
+
+## Day 10
