@@ -650,3 +650,127 @@ sudo ufw deny from 192.168.0.100 to any port 22
 [Source](https://www.thegeekstuff.com/2010/03/netstat-command-examples/).
 
 ## Day 10 - Hacer que la computadora haga el trabajo por ti
+
+#### CRON
+Cada usuario tiene un conjunto de herramientas que puede listar con `crontal -l`.
+
+También hay un cron para todo el sistema definido en `/etc/crontab`, echar un vistazo con `less`.
+
+Ver el directorio `/etc/cron.daily`:
+```bash
+0anacron  apache2  apt-compat  dpkg  logrotate  man-db  popularity-contest
+```
+Cada directorio tiene scripts que son ejecutados por el archivo cron del sistema y se ejecutan en orden alfabético usando `run-parts`i.
+
+#### at
+Programador de tareas no repetitivas
+
+#### Temporizador de sistema
+[Enlace](https://wiki.archlinux.org/title/Systemd/Timers)
+
+Systemd ahora incluido en todas las distribuciones Linux, también se puede usar para ejecutar tareas programadas en momentos especificos. Ver cuáles ya están configurados:
+```bash
+systemctl list-timers
+```
+
+#### Los temporizadores son archivos `.times`
+
+#### 1. Unidades de temporizador
+- **Temporizadores en tiempo real** (también conocidos como reloj de pared) se activan en un evento del calendario, de la misma manera que los cronjobs.
+- **Temporizadores monotonicós** se activan después de un tiempo relativo a un punto de inicio de variable. Se detienen si la computadora se suspede o se apaga.
+
+#### 2. Unidades de servicio
+Parar cada archivo `.timer`, existe un archivo `.service` (ej, `foo.timer` y `foo.service`). El archivo `.timer` activa y controla a `.service`. El archivo `.service` no requiere `[Install]`. Si es necesario, se pude usar un nombre diferente para controlar el archivo usando Unit= en la seción [Timer].
+
+#### 3. Administración
+Se habilita y se inicia con `sudo systemctl` con el subfijo `.time`.
+Notas:
+- Listar todos incluido los inactivos `systemctl list-times --all`.
+- Lo más probable es que el servicio este inactivo a menos que se esté ejecutando.
+- Si un temporizador no esta sincronizado, se puede eliminar `stamp-*` presente en `var/lib/systemd/timers` o `~/.local/share/systemd/`. Si se elimina, se reconstruira en el próximo inicio del temporizador.
+
+#### 4. Ejemplos
+
+#### Temporizador monotonicós
+Un temporizador que se inicia 15 minutos después del arranque y nuevamente cada semana mientras el sistema esté funcionando.
+```bash
+/etc/systemd/system/foo.timer
+
+[Unit]
+Description=Run foo weekly and on boot
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=1w
+
+[Install]
+WantedBy=timers.target
+
+```
+
+#### Temporizador en tiempo real
+Temporizador que se inicia una vez a la semana (a las 00:00 del lunes). Cuando se activa, se activa el servicio de inmediato si se perdió la última hora de inicio (`Persistent=true`), por ejemplo, si el sistema estaba apagado.
+```bash
+/etc/systemd/system/foo.timer
+
+[Unit]
+Description=Run foo weekly
+
+[Timer]
+OnCalendar=weekly
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+```
+Cuando se requieran fechas y horas más especificas, el evento `OnCalendar` utiliza el siguiente formato.
+```bash
+DayOfWeek Year-Month-Day Hour:Minute:Second
+```
+Se puede usar un asterisco para especificar cualquier valor y se pueden usar comas para enumerar los valores posibles. Dos valores separados por `..` indican un rango continuo.
+
+Ejempo, el servico se ejecuta los primeros cuatro días de cada mes a las 12:00pm, pero solo si es lunes o martes.
+```bash
+OnCalendar=Mon,Tue *-*-01..04 12:00:00
+```
+Ejecutar el servicio el primer sabado de casa mes:
+```bash
+OnCalendar=Sat *-*-1..7 18:00:00
+```
+Al usar DayOfWeek se debe especificar al menos un día de la semana. Para ejecutar todos los días a las 4 am:
+```bash
+OnCalendar=*-*-* 4:00:00
+```
+Ejecutar en diferentes momentos, más de una vez. Por ejemplo, de lunes a viernes a las 22:30 y otro a las 20:00 en fines de semana:
+```bash
+OnCalendar=Mon..Fri 22:30
+OnCalendar=Sat,Sun 20:00
+```
+Consejos:
+- `OnCalendar` se pude probar usando `sudo systemd-analyze calendar "Mon *-*-* 13:00:00"`.
+- Existe la opción de `faketime`.
+
+#### 5. Unidades de temporizador transitorios
+Se puede usar `sytemd-run` para crear un `.timer` sin tener un archivo de servicio. Ejemplo, usar touch después de 30 segundos:
+```bash
+systemd-run --on-active=30 /bin/touch /tmp/foo
+```
+Usar un archivo `.service` que no tiene un `.timer`:
+```bash
+systemd-run --on-active="12h 30m" --unit someunit.service
+```
+
+#### 6. Como reemplazo de cron
+Cron es el administrador de servicios más conocidos, pero systemd puede ser una alternativa
+
+#### Beneficios
+- Los trabajos se pueden iniciar fácilmente, independiente de sus temporizadores.
+- Cada trabajo puede configurarse para ejecutarse en un entorno específico.
+- Se pueden adjuntar a `cgroups`.
+- Se pueden configurar para que depenan de otros systemd.
+- Se registran en systemd para facilitar la depuración.
+
+#### Enlaces adicionales
+- [Sytemd en lugar de cron](https://www.maketecheasier.com/use-systemd-timers-as-cron-replacement/)
+- [IBM cron](https://developer.ibm.com/tutorials/l-lpic1-107-2/)
+- [IBM tutorial](https://developer.ibm.com/tutorials/au-usingcron/)
