@@ -13,7 +13,7 @@ Crear una contraseña para el nuevo usuario.
 ```bash
 sudo passwd bender
 ```
-Es mejor usar `adduser`, es mas intuitivo, creá usario, directorio y solicita una contraseña.
+Es mejor usar `adduser`, es más intuitivo, creá usario, directorio y solicita una contraseña.
 ```bash
 sudo adduser bender
 ```
