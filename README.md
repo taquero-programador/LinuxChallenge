@@ -774,3 +774,190 @@ Cron es el administrador de servicios más conocido, pero systemd puede ser una 
 - [Sytemd en lugar de cron](https://www.maketecheasier.com/use-systemd-timers-as-cron-replacement/)
 - [IBM cron](https://developer.ibm.com/tutorials/l-lpic1-107-2/)
 - [IBM tutorial](https://developer.ibm.com/tutorials/au-usingcron/)
+
+## Day 11 - Encontrando cosas
+
+#### locate
+Localizar el archivo `access.lo`:
+```bash
+# instalar
+sudo apt install mlocate -y
+
+locate access.log
+```
+Puede retornar un error o no localizar el archivo, usar `sudo updatedb`. Resultado:
+```bash
+/var/log/nginx/access.log
+/var/log/nginx/access.log.1
+```
+
+#### find
+El comando buscara a través de una estructura de directorio es busca de archivos que coincidan con algunos criterios, por ejemplo, nombre, tamaño, o cuando se actualizó por última vez.
+```bash
+sudo find /var -name acceder.log
+sudo find /home -mtime -3
+```
+El primero busca archivos con el nombre `access.log`, el segundo busca en el directorio `/home` archivos con una última fecha de actualización de 3 días.
+
+Filtrar los errores al ejecutar `find` sin permisos root:
+```bash
+find /var -name access.log 2>&1 | grep -vi "Permission denied"
+```
+
+#### grep-r
+Permite una busqueda recurisiva dentro de un directorio y se le puede añadir el patron a buscar
+```bash
+grep -R -i "PermitRootLogin" /etc/*
+```
+Para archivos comprimidos se puede usar `zless` o `zgrep`.
+
+#### which
+Permite saber la ruta desde donde se ejecuta determinado comando
+
+Ver de donde viene el binario de `nano`:
+```bash
+/usr/bin/vim
+```
+
+#### 26 comandos con find
+Sintax básica
+```bash
+find <path> {dir or file} <option> <action or result>
+```
+1. Encontrar todos los directorio o archivos del directorio actual:
+```bash
+# directorios
+find . -type d
+
+# archivos
+find . -type f
+```
+2. Listar los archivos de un directorio:
+```bash
+# listar directorio y archivos
+find Downloads/
+
+# solo archivos
+find Downloads/ -type d
+
+# directorios
+find Downloads/ -type f
+```
+3. Encontrar archivo con nombre en un directorio:
+```bash
+find Documentos/ -type f -name main.rs
+
+# buscar por tipo de archivo
+find . -type f -name "*.rs"
+```
+4. Encontrar archivos en múltiples directorios:
+```bash
+find dir1/ dir2/ -type f -name "*.md"
+```
+5. Encontrar archivos ingorando mayúsculas y minúsculas:
+```bash
+find dir1/  -type f -iname readme.md
+```
+6. Encontrar los archivos que no coincidan con lo ingresado:
+```bash
+find Música/ -type f -not -name "*.flac"
+```
+7. Encontrando archivos con múltiples condiciones:
+```bash
+# encuentra archivo .opus y .mp3
+find Música/ -type f -regex ".*\.\(mp3\|opus\)$"
+```
+8. Encuentra archivos usando la condición `OR`:
+```bash
+find Música/ -type f -name "*.gz" -o -type f -name "*.csv"
+```
+9. Archivos basados en sus permisos:
+```bash
+find . -type f -perm 0777
+
+# encontrar los ejecutables
+find . -type f -perm /a+x
+```
+10. Encuentra los archivos ocultos:
+```bash
+find Documentos/git -type f -name ".*"
+```
+11. Localizar los archivo SGID:
+```bash
+sudo find / -perm /g=s
+```
+12. Archivos SUID:
+```bash
+sudo find / -perm /u=s
+```
+13. Archivos legibles que no tiene permiso de ejecución:
+```bash
+find $HOME -perm -a+r \! -perm /a+x
+```
+14. Buscar varios tipos de archios:
+```bash
+find $HOME -type f,d,l
+```
+15. Encuentra los archivos pertenecientes a determinado usuario:
+```bash
+sudo find /home/bender -user bender -type f -name "*.sh"
+```
+16. Archivos propiedas de un grupo:
+```bash
+sudo find / -group adm
+```
+17. Encontrar archivo según su tamaño:
+```bash
+find Documentos/ -size 21M
+
+# superior
+find Documentos/ -size +50M
+
+# menor
+find Documentos/ -size -12M
+
+# rango
+find Documentos/ -size +30M -size -35M
+```
+18. No desciende directorios en otro sistema de archivos:
+```bash
+find / -xdev -size +100M 2>/dev/null
+```
+19. Encutra archivos modificados hace N días:
+```bash
+find / -mtime 3
+```
+20. Archivos accedidos N días:
+```bash
+find / -atime 3
+```
+21. Encuentra archivos y directorio vacios:
+```bash
+# archivos
+find / -type f -empty
+# or
+find / -type f -size 0
+
+# directorios
+find / -type d -empty
+```
+22. Buscar y eliminar archivos:
+```bash
+find $HOME -type f -name "*.mp3" -delete
+```
+23. Encuentra archivos más grandes y más pequeños:
+```bash
+find $HOME -type f -exec ls -s {} \; | sort -n -r | head -3
+```
+24. Enviar el resultado a un archivo:
+```bash
+find ~/Música/javier -size +65M -exec ls -sh {} \;
+```
+25. Buscar archivos y cambiar permisos:
+```bash
+find $HOME -type f -perm 777 -exec chmod 644 {} \;
+```
+26. Buscar texto en archivos:
+```bash
+find Dir/ -type f -name "*.md" -exec grep -i "command" {} \;
+```
