@@ -951,7 +951,7 @@ find $HOME -type f -exec ls -s {} \; | sort -n -r | head -3
 ```
 24. Enviar el resultado a un archivo:
 ```bash
-find ~/Música/javier -size +65M -exec ls -sh {} \; > output.txt
+find ~/Música/ -size +65M -exec ls -sh {} \; > output.txt
 ```
 25. Buscar archivos y cambiar permisos:
 ```bash
