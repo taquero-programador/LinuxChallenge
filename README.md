@@ -778,7 +778,7 @@ Cron es el administrador de servicios más conocido, pero systemd puede ser una 
 ## Day 11 - Encontrando cosas
 
 #### locate
-Localizar el archivo `access.lo`:
+Localizar el archivo `access.log`:
 ```bash
 # instalar
 sudo apt install mlocate -y
@@ -792,7 +792,7 @@ Puede retornar un error o no localizar el archivo, usar `sudo updatedb`. Resulta
 ```
 
 #### find
-El comando buscara a través de una estructura de directorio es busca de archivos que coincidan con algunos criterios, por ejemplo, nombre, tamaño, o cuando se actualizó por última vez.
+El comando buscara a través de una estructura de directorio en busca de archivos que coincidan con algunos criterios, por ejemplo, nombre, tamaño, o cuando se actualizó por última vez.
 ```bash
 sudo find /var -name acceder.log
 sudo find /home -mtime -3
@@ -805,7 +805,7 @@ find /var -name access.log 2>&1 | grep -vi "Permission denied"
 ```
 
 #### grep-r
-Permite una busqueda recurisiva dentro de un directorio y se le puede añadir el patron a buscar
+Permite una busqueda recursiva dentro de un directorio y se le puede añadir el patron a buscar
 ```bash
 grep -R -i "PermitRootLogin" /etc/*
 ```
@@ -894,7 +894,7 @@ sudo find / -perm /u=s
 ```bash
 find $HOME -perm -a+r \! -perm /a+x
 ```
-14. Buscar varios tipos de archios:
+14. Buscar varios tipos de archivos:
 ```bash
 find $HOME -type f,d,l
 ```
@@ -902,7 +902,7 @@ find $HOME -type f,d,l
 ```bash
 sudo find /home/bender -user bender -type f -name "*.sh"
 ```
-16. Archivos propiedas de un grupo:
+16. Archivos propiedad de un grupo:
 ```bash
 sudo find / -group adm
 ```
@@ -931,7 +931,7 @@ find / -mtime 3
 ```bash
 find / -atime 3
 ```
-21. Encuentra archivos y directorio vacios:
+21. Encuentra archivos y directorios vacios:
 ```bash
 # archivos
 find / -type f -empty
@@ -951,7 +951,7 @@ find $HOME -type f -exec ls -s {} \; | sort -n -r | head -3
 ```
 24. Enviar el resultado a un archivo:
 ```bash
-find ~/Música/javier -size +65M -exec ls -sh {} \;
+find ~/Música/javier -size +65M -exec ls -sh {} \; > output.txt
 ```
 25. Buscar archivos y cambiar permisos:
 ```bash
