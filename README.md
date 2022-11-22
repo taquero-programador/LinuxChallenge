@@ -961,3 +961,16 @@ find $HOME -type f -perm 777 -exec chmod 644 {} \;
 ```bash
 find Dir/ -type f -name "*.md" -exec grep -i "command" {} \;
 ```
+
+## Day 12 - Transferencia de archivos
+Mover archivos entre un sistema y servidor
+
+#### Protocolos
+Existe una amplia forma de que Linux comparta archivos, como:
+- SMB: intercambio de archivos de Microsoft, usado en sistemas Windows para red local.
+- AFP: compartir archivos de Apple, útil en red local.
+- WebDAV: para compartir sobre protocolos web (http y https si está disponible).
+- FTP: protocolo tradicional de uso compartido en internet.
+- scp: soporte simple para copiar archivos.
+- rsync: copia de archivos rápida y eficiente.
+- SFTP: acceso y copia de archivos sobre SSH.
