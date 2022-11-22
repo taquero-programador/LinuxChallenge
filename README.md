@@ -13,7 +13,7 @@ Crear una contraseña para el nuevo usuario.
 ```bash
 sudo passwd bender
 ```
-Es mejor usar `adduser`, es más intuitivo, creá usario, directorio y solicita una contraseña.
+Es mejor usar `adduser`, es más intuitivo; creá usario, directorio y solicita una contraseña.
 ```bash
 sudo adduser bender
 ```
@@ -1064,3 +1064,24 @@ Para poder utilizarlo hay que confirmar con el siguiente comando `tune2fs -l`.
 
 #### CHMOD
 [info](http://catcode.com/teachmod/).
+
+## Day 14 - Usuarios y grupos
+
+#### Agregar usuario(s)
+Comando para agregar el nuevo usuario:
+```bash
+sudo adduser katulu
+```
+El comando puede funcionar diferente en cada sistema, si no solicita una contraseña, crearla con:
+```bash
+sudo passwd katulu
+```
+Para que el usuario tenga permisos `root` hay que agregarlo a `sudoers`:
+```bash
+sudo visudo
+# añadir
+username ALL=(ALL:ALL) PASSWD: ALL
+
+# or
+sudo usermod -a -G sudo username
+```
