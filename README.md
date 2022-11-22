@@ -974,3 +974,93 @@ Existe una amplia forma de que Linux comparta archivos, como:
 - scp: soporte simple para copiar archivos.
 - rsync: copia de archivos rápida y eficiente.
 - SFTP: acceso y copia de archivos sobre SSH.
+
+## Day 13 - Permisos
+Los archivos en un sistema Linux siempre tiene "permisos" asociados, controlando quién tiene acceso y qué tipo de acceso. 
+
+#### Propiedades
+Todos los archivos están etiquetados con el nombre de usuario y el grupo que los posee, ejemplo:
+```bash
+-rw------- 	1 steve  staff  	4478979  6 Feb  2011 private.txt
+-rw-rw-r-- 	1 steve  staff  	4478979  6 Feb  2011 press.txt
+-rwxr-xr-x 	1 steve  staff  	4478979  6 Feb  2011 upload.bin
+```
+Entonces los archivos son propiedad de "steve" y del grupo "staff".
+
+#### Permisos
+Para la lista del ejemplo anterior:
+- pritave.txt: Steve tiene permisos de "rw" (lectura y escritura), pero ningún otro tiene permisos.
+- press.txt: tanto Steve como cualquier otro usuario tiene permiso de lectura y escritura.
+- unpload.bin: Steve puede leer, escribir y los demás solo leer. además todos pueden ejecutar el archivo.
+
+Crear un archivo de prueba `touch test.txt && echo "this a test" > test.txt`.
+- u: para usuario.
+- g: para el grupo.
+- o: otros.
+- a: todas las anteriores.
+- -: para eliminar un permiso
+- +: agrega permisos.
+- =: funciona en ambos casos.
+Eliminar los permisos de escritura para el archivo:
+```bash
+chmod a-w test.txt
+```
+Eliminar permisos de lectura:
+```bash
+chmod a-r test.txt
+```
+Añadir permisos de lectura y escritura en grupos:
+```bash
+chmod g+rw test.txt
+```
+Cambiar el grupo a un directorio o archivo (solo puede haber un grupo como propietario):
+```bash
+sudo chgrp new_group dir/
+```
+Quitar todos los permisos y solo dejarlo en solo lectura:
+```bash
+chmod u=r test.txt
+```
+Quitar todos los permisos:
+```bash
+chmod u=
+```
+
+#### Grupos
+En la mayoría de los sistemas Linux modernos, se crea un grupo para cada usuario. Sin embargo se pueden añadir nuevos grupos.
+
+Para ver los grupos a los que eres miebro `groups`, para ver los de otro usuario `groups bender`.
+
+Añadir un usuario a un grupo existente:
+```bash
+sudo usermod -a -G name_group user
+```
+
+#### UMASK
+Se utiliza para controlar la máscara del modo de creación de archivos, que determina el valor inicial de los bits de permisos para los archivos recién creados.
+
+Mostrar el valor actual de la máscara:
+```bash
+umask
+```
+Referencía:
+Octal | Binario | Signigicado
+-- | -- | --
+0 | 000 | sin permisos
+1 | 001 | solo ejecución
+2 | 010 | solo escritura
+3 | 011 | escritura y ejecución
+4 | 100 | solo lectura
+5 | 101 | lectura y ejecución
+6 | 110 | lectura y escritura
+7 | 111 | lectura, escritura y ejecución
+
+#### ACL
+Los ACL son un segundo nivel de permisos, que puede anular los estándares ugo/rwx. Cuando se usan correctamente, pueden otorgar una mayor granularidad al configurar el acceso a un archivo o directorio.
+
+Para poder utilizarlo hay que confirmar con el siguiente comando `tune2fs -l`.
+
+[Más info](https://linuxconfig.org/how-to-manage-acls-on-linux) y [IMB](https://www.redhat.com/sysadmin/linux-access-control-lists).
+
+#### CHMOD
+[info](http://catcode.com/teachmod/).
