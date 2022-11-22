@@ -991,16 +991,16 @@ Entonces los archivos son propiedad de "steve" y del grupo "staff".
 Para la lista del ejemplo anterior:
 - pritave.txt: Steve tiene permisos de "rw" (lectura y escritura), pero ningún otro tiene permisos.
 - press.txt: tanto Steve como cualquier otro usuario tiene permiso de lectura y escritura.
-- unpload.bin: Steve puede leer, escribir y los demás solo leer. además todos pueden ejecutar el archivo.
+- unpload.bin: Steve puede leer, escribir y los demás solo leer, además todos pueden ejecutar el archivo.
 
 Crear un archivo de prueba `touch test.txt && echo "this a test" > test.txt`.
-- u: para usuario.
-- g: para el grupo.
-- o: otros.
-- a: todas las anteriores.
-- -: para eliminar un permiso
-- +: agrega permisos.
-- =: funciona en ambos casos.
+- `u`: para usuario.
+- `g`: para el grupo.
+- `o`: otros.
+- `a`: todas las anteriores.
+- `-`: para eliminar un permiso
+- `+`: agrega permisos.
+- `=`: funciona en ambos casos.
 Eliminar los permisos de escritura para el archivo:
 ```bash
 chmod a-w test.txt
@@ -1017,7 +1017,7 @@ Cambiar el grupo a un directorio o archivo (solo puede haber un grupo como propi
 ```bash
 sudo chgrp new_group dir/
 ```
-Quitar todos los permisos y solo dejarlo en solo lectura:
+Quitar todos los permisos y dejarlo en solo lectura:
 ```bash
 chmod u=r test.txt
 ```
@@ -1027,9 +1027,9 @@ chmod u=
 ```
 
 #### Grupos
-En la mayoría de los sistemas Linux modernos, se crea un grupo para cada usuario. Sin embargo se pueden añadir nuevos grupos.
+En la mayoría de los sistemas Linux modernos, se creá un grupo para cada usuario. Sin embargo se pueden añadir nuevos grupos.
 
-Para ver los grupos a los que eres miebro `groups`, para ver los de otro usuario `groups bender`.
+Para ver los grupos a los que eres miembro `groups`, para ver los de otro usuario `groups bender`.
 
 Añadir un usuario a un grupo existente:
 ```bash
@@ -1060,7 +1060,7 @@ Los ACL son un segundo nivel de permisos, que puede anular los estándares ugo/r
 
 Para poder utilizarlo hay que confirmar con el siguiente comando `tune2fs -l`.
 
-[Más info](https://linuxconfig.org/how-to-manage-acls-on-linux) y [IMB](https://www.redhat.com/sysadmin/linux-access-control-lists).
+[Más info](https://linuxconfig.org/how-to-manage-acls-on-linux) & [IBM](https://www.redhat.com/sysadmin/linux-access-control-lists).
 
 #### CHMOD
 [info](http://catcode.com/teachmod/).
