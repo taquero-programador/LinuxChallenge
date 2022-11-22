@@ -1045,7 +1045,7 @@ Mostrar el valor actual de la máscara:
 umask
 ```
 Referencía:
-Octal | Binario | Signigicado
+Octal | Binario | Significado
 -- | -- | --
 0 | 000 | sin permisos
 1 | 001 | solo ejecución
