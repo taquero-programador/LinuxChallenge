@@ -1001,6 +1001,7 @@ Crear un archivo de prueba `touch test.txt && echo "this a test" > test.txt`.
 - `-`: para eliminar un permiso
 - `+`: agrega permisos.
 - `=`: funciona en ambos casos.
+
 Eliminar los permisos de escritura para el archivo:
 ```bash
 chmod a-w test.txt
