@@ -417,7 +417,7 @@ Usando `!` junto a un número traera/ejecutara el comando del historial.
 ```bash
 !20
 ```
-Con la combinación `ctrl + r`, permite realizar una busqueda en el hisorial de comandos minestras se escibre. Con `!!` trae/ejecuta el último comando. `!sudo` ejecuta el último comando con `sudo`. `sudo !!` ejecuta el último comando usando permisos `sudo`.
+Con la combinación `ctrl + r`, permite realizar una busqueda en el hisorial de comandos mientras se escibre. Con `!!` trae/ejecuta el último comando. `!sudo` ejecuta el último comando con `sudo`. `sudo !!` ejecuta el último comando usando permisos `sudo`.
 
 Ver el historial del archivo `.bash_history` o `.zsh_history`.
 ```bash
@@ -1136,3 +1136,125 @@ Cuando haga un `upgrade`, probablemente se actualice a la versión más reciente
 - [Introducción yum](https://fedoranews.org/tchung/howto/2003-11-09-yum-intro.shtml).
 - [Gestión de paquetes APT](https://fedoranews.org/tchung/howto/2003-11-09-yum-intro.shtml).
 - [Qué es software libre](https://www.debian.org/intro/free).
+
+## Day 16 - Archivar y comprimir
+Como administrador de sistemas, debe poder trabajar con confianza con archivos comprimidos. En particular, dos de las responasabilidades clave; instalación de software nuevo y la gestión de copias de seguridad a menudo requieren esto.
+
+#### Crear archivos
+En otros sistemas operativos, las aplicaciones como WinZip y pkzip se han utilizado durante mucho tiempo para reunir una serie de archivos y carpetas en un archivo comprimido, con la extensión `.zip`. Linux adopta adopta un enfoque ligeramente diferente, con la "reunión" de archivos y carpetas en un paso y en otro la compresión.
+
+Entonces, podría crear una "instantánea" de los archivos actuales:
+- `-c`: creá un archivo comprimido.
+- `-x`: extrae el contenido.
+- `-v`: `verbose`, muestra los archivos comprimidos durante el proceso.
+- `-z`: genera un archivo `gzip`.
+- `-f`: permite especificar un nombre de archivo de salida.
+- `-t`: para ver el contenido de un tar.
+- `-j`: para crear archivos `bzip2`.
+- `--wildcards`: extrar groupos por tipo de archivo:
+- `--exclude`: excluye arhivos y directorios al crear tar.
+- `--delete`: elimina archivos y directorios de un tar.
+```bash
+tar cvzf output.tar.gz dir/
+```
+
+#### Comandos TAR
+1. Crear un archivo `.tar`:
+```bash
+tar -cvf output.tar dir/
+```
+2. Crear un `tar.gz` o `.tgz`:
+```bash
+tar -cvzf output.tar.gz dir/
+# or
+tar -cvzf output.tgz dir/
+```
+3. Crear un `tar.bz2`: la función `bz2` comprime y crear un archivo de almacenamiento de menos tamaño que `gzip`. La compresión con `bz2` toma más tiempo para comprimir y descomprimir a diferencia de `gzip`.
+
+Para crear un archivo altamente comprimido se usa `-j`, (tar.bz2 y tb2 es similar a tb2).
+```bash
+# bz2
+tar -cvfj output.tar.bz2 dir/
+# tbz
+tar -cvzj output.tar.tbz dir/
+# tb2
+tar -cvzj output.tar.tb2 dir/
+```
+4. Descomprimir un archivo tar, usar `x`, por defecto se descomprimen en el directorio actual, para cambiar la ubiación usar `-C`.
+```bash
+# archivo tar
+tar -xvf inout.tar
+
+# gzip
+tar -xvzf input.tar.gz
+# descomprimir en otro directorio
+tar -xvzf input.tar.gz -C destino
+
+# tar.bz2
+tar -xvf input.tar.bz2
+```
+5. Listar el contenido de un archivo tar:
+```bash
+tar -tvf input.tar
+```
+6. Extrar un archivo único de un tar:
+```bash
+# tar
+tar -xvf input.tar file_name.txt
+# or
+tar --extract --file=input.tar file_name.txt
+
+# gzip
+tar -zxvf input.tar.gz file.txt
+# or
+tar --extract --file=input.tar.gz file.txt
+
+# bz2
+tar -jxvf input.tar.b2 file.txt
+# or
+tar --extract --file=input.tar.bz2 file.txt
+```
+7. Extraer más de un archivo:
+```bash
+# tar
+tar xvf input.tar file1.txt file4.jpg
+
+# gzip
+tar cvzf input.tar.gz file2.txt doc.docx
+
+# bz2
+tar xvfj input.tar.bz2 file3.txt file.xlsx
+```
+8. Extrar un grupo de archivos por extensión:
+```bash
+# tar
+tar xvf input.tar --wildcards "*.rs" --wildcards "*.md"
+
+# gzip
+tar xvzf input.tar.gz --wildcards "*.py"
+
+# bz2
+tar xvfj input.tar.bz2 --wildcards "*.md"
+```
+9. Añadir archivos o directorios a un archivo tar:
+```bash
+# tar
+tar -rvf input.tar input.txt
+```
+Los comprimidos `tar.gz` y `bz2` no permiten añadir archivos.
+10. Excluir archivos o directorios al crear un tar:
+```bash
+# file
+tar cvzf output.tar.gz --exclude="file.txt" --exclude="*.cpp" dir/
+# dir
+tar cvzf output.tar.gz --exclude="dir/dir3" dir/
+# excluir multiple tipo de archivo
+tar cvzf output.tar.gz --exclude="*.jpg" dir/
+```
+11. Eliminar archivos o directorios de un tar (no funciona en `gzip` y `bz2`):
+```bash
+# file
+tar --delete -f input.tar filename.txt
+# dir
+tar --delete -f input.tar dir/dir_to_delete
+```
