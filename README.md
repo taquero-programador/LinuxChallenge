@@ -1089,8 +1089,8 @@ sudo usermod -a -G sudo username
 
 ## Day 15 - Repositorios
 
-#### Dónde se encuentra toda esa conficuración?
-Adminstraión de paquetes `apt` es usado en distribuciones como Debian y Ubuntu.
+#### Dónde se encuentra toda esa configuración?
+Administración de paquetes `apt` es usado en distribuciones como Debian y Ubuntu.
 
 La configuración se realiza en archivos de configuración en `/etc/apt`, y para ver de dónde proviene los paquetes que instala usar `less` en `/etc/apt/sources.list`, donde aparecera varias URL a un repositorio de una versión especifica.
 ```bash
@@ -1121,7 +1121,7 @@ sudo apt install netperf
 #### Extensión - PPA Ubuntu
 Ubuntu también permite a los usuarios registrar una cuenta y configurar el software en un archivo de paquete personal (PPA); por lo general, estos son configurados por desarrolladores entusiastas y le permite instalar el último software de "vanguardia".
 
-Por ejemplo, `neofetch`, si quisiera una versión anterior podría hacerlo instalando un PPA del desarrolladores:
+Por ejemplo, `neofetch`, si quisiera una versión anterior podría hacerlo instalando un PPA del desarrollador:
 ```bash
 sudo add-apt-repository ppa:dawidd0811/neofetch
 ```
