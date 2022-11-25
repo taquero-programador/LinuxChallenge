@@ -1304,7 +1304,7 @@ For far more in-depth compilation, installation, and removal notes,
 read the Nmap Install Guide at https://nmap.org/book/install.html.
 ```
 Esto es lo que hace cada uno de los pasos:
-- `./configure`: es un script que verifica un servidor (para ver si está basado en ARM o INTEL, 32 o 64 bits, qué compilador tiene, etc).
+- `./configure`: es un script que verifica un servidor (para ver si está basado en ARM o INTEL, 32 o 64 bits, qué compilador tiene, etc). Si el proceso realiza preguntas, seleccionar las opciones predeterminadas y los mensaje de ADVERTENCIA no son para preocuparse, es probable que todo salga bien.
 - `make`: compila el software, normalmente llamando al compilador GNU `gcc`. Esto puede generar una gran cantidad de texto de aspecto aterrador y tomar uno o dos minutos, o hasta horas para paquetes como LibreOffice.
 - `make install`: este paso toma los archivos compilados e instala esa documentación más en su sistema, en algunos casos, configurar servicios y tareas programadas. El proceso se instala en todo el sistema para todos los usuarios, por lo que requiere permisos `root` y ejecutar: `sudo make install`.
 
