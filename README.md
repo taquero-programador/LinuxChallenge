@@ -1271,6 +1271,9 @@ sudo apt install build-essential
 
 #### Obtener la fuente
 Probar que ya se tiene `nmpa` haciendo uso de `namp -V` para ver la versión instalada. A continuación `which nmap` para ver dónde está almacenado el ejecutable.
+```bash
+/usr/bin/nmap
+```
 
 Ahora en la ir a la página del proyecto para los desarrolladores [nmap.org](http://nmap.org/) y tomar la última versión de vanguardia. Ir a la sección descargas, luego "distribución de código de fuente" y seleccionar "tarball de lanzamiento", usar la URL para el archivo `bz2` or `gzip`.
 ```txt
@@ -1302,7 +1305,7 @@ read the Nmap Install Guide at https://nmap.org/book/install.html.
 ```
 Esto es lo que hace cada uno de los pasos:
 - `./configure`: es un script que verifica un servidor (para ver si está basado en ARM o INTEL, 32 o 64 bits, qué compilador tiene, etc).
-- `make`: compila el software, normalmente llamando al compilado GNU `gcc`. Esto puede generar una gran cantidad de texto de aspecto aterrador y tomar uno o dos minutos, o hasta horas para paquetes como LibreOffice.
-- `make install`: este paso toma los archivos compilados e instala esa documentación más en su sistema, en algunos casos, configurar servicios y tareas programadas. El porceso se instala en todo el sistema para todos los usuarios, por lo que requiere permisos `root` y ejecutar: `sudo make install`.
+- `make`: compila el software, normalmente llamando al compilador GNU `gcc`. Esto puede generar una gran cantidad de texto de aspecto aterrador y tomar uno o dos minutos, o hasta horas para paquetes como LibreOffice.
+- `make install`: este paso toma los archivos compilados e instala esa documentación más en su sistema, en algunos casos, configurar servicios y tareas programadas. El proceso se instala en todo el sistema para todos los usuarios, por lo que requiere permisos `root` y ejecutar: `sudo make install`.
 
-Este último paso probablemente habrá sobrescrito `nmap`, pero el nuevo se haya instalado en su lugar.
+Este último paso probablemente habrá sobrescrito `nmap`, pero la nueva instalación tendra la última versión.
