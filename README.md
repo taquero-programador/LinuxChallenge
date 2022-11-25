@@ -1086,3 +1086,53 @@ username ALL=(ALL:ALL) PASSWD: ALL
 # or
 sudo usermod -a -G sudo username
 ```
+
+## Day 15 - Repositorios
+
+#### Dónde se encuentra toda esa conficuración?
+Adminstraión de paquetes `apt` es usado en distribuciones como Debian y Ubuntu.
+
+La configuración se realiza en archivos de configuración en `/etc/apt`, y para ver de dónde proviene los paquetes que instala usar `less` en `/etc/apt/sources.list`, donde aparecera varias URL a un repositorio de una versión especifica.
+```bash
+deb http://deb.debian.org/debian bullseye main contrib non-free
+```
+
+#### Repositorios adicionales
+Existe una gran cantidad de software en los repositorios "estándar", a menudo hay paquetes que no están disponibles, generalmente por estas dos razones:
+- Estabilidad: CentOS se basa en RHEL, que se centra firmemente en la estabilidad de grandes instalaciones de servidores comerciales, por lo que los juegos y muchos paquetes menores no están disponibles.
+- ideología: Ubuntu y Debian tienen una fuerte ética de "libertad de software", lo que significa que ciertos paquetes pueden no estar disponibles.
+
+#### habilitar repositorios adicionales
+Verificación rápida para saber cuántos paquetes tiene disponible para instalar:
+```bash
+apt-cache dump | grep "Package" | wc -l
+```
+A veces hay paquetes adicionales disponibles si habilita esos repositorios. La mayoría de las distribuciones Linux tiene un concepto similar, pero en Ubuntu, a menudo los repositorios "Universe" y "Multiverse" están deshabilitados. 
+- Para habilitar el Repositorio "Multiverse", siga la siguiente liga: [wiki](https://help.ubuntu.com/community/Repositories/CommandLine).
+Después actualice su caché local de aplicaciones disponibles:
+```bash
+sudo apt update
+```
+Ahora podra instalar un paquete:
+```bash
+sudo apt install netperf
+```
+
+#### Extensión - PPA Ubuntu
+Ubuntu también permite a los usuarios registrar una cuenta y configurar el software en un archivo de paquete personal (PPA); por lo general, estos son configurados por desarrolladores entusiastas y le permite instalar el último software de "vanguardia".
+
+Por ejemplo, `neofetch`, si quisiera una versión anterior podría hacerlo instalando un PPA del desarrolladores:
+```bash
+sudo add-apt-repository ppa:dawidd0811/neofetch
+```
+Actualizar `sudo apt update`.
+
+Instalar `sudo apt install neofetch`.
+
+Cuando haga un `upgrade`, probablemente se actualice a la versión más reciente, pues los desarrolladores simpre están actualizando.
+
+#### Recursos
+- [Comparación de administración de paquetes](https://wiki.archlinux.org/title/Pacman/Rosetta).
+- [Introducción yum](https://fedoranews.org/tchung/howto/2003-11-09-yum-intro.shtml).
+- [Gestión de paquetes APT](https://fedoranews.org/tchung/howto/2003-11-09-yum-intro.shtml).
+- [Qué es software libre](https://www.debian.org/intro/free).
