@@ -1141,7 +1141,7 @@ Cuando haga un `upgrade`, probablemente se actualice a la versión más reciente
 Como administrador de sistemas, debe poder trabajar con confianza con archivos comprimidos. En particular, dos de las responasabilidades clave; instalación de software nuevo y la gestión de copias de seguridad a menudo requieren esto.
 
 #### Crear archivos
-En otros sistemas operativos, las aplicaciones como WinZip y pkzip se han utilizado durante mucho tiempo para reunir una serie de archivos y carpetas en un archivo comprimido, con la extensión `.zip`. Linux adopta adopta un enfoque ligeramente diferente, con la "reunión" de archivos y carpetas en un paso y en otro la compresión.
+En otros sistemas operativos, las aplicaciones como WinZip y pkzip se han utilizado durante mucho tiempo para reunir una serie de archivos y carpetas en un archivo comprimido, con la extensión `.zip`. Linux adopta un enfoque ligeramente diferente, con la "reunión" de archivos y carpetas en un paso y en otro la compresión.
 
 Entonces, podría crear una "instantánea" de los archivos actuales:
 - `-c`: creá un archivo comprimido.
@@ -1151,8 +1151,8 @@ Entonces, podría crear una "instantánea" de los archivos actuales:
 - `-f`: permite especificar un nombre de archivo de salida.
 - `-t`: para ver el contenido de un tar.
 - `-j`: para crear archivos `bzip2`.
-- `--wildcards`: extrar groupos por tipo de archivo:
-- `--exclude`: excluye arhivos y directorios al crear tar.
+- `--wildcards`: extraer grupos por tipo de archivo:
+- `--exclude`: excluye archivos y directorios al crear tar.
 - `--delete`: elimina archivos y directorios de un tar.
 ```bash
 tar cvzf output.tar.gz dir/
@@ -1171,7 +1171,7 @@ tar -cvzf output.tgz dir/
 ```
 3. Crear un `tar.bz2`: la función `bz2` comprime y crear un archivo de almacenamiento de menos tamaño que `gzip`. La compresión con `bz2` toma más tiempo para comprimir y descomprimir a diferencia de `gzip`.
 
-Para crear un archivo altamente comprimido se usa `-j`, (tar.bz2 y tb2 es similar a tb2).
+Para crear un archivo altamente comprimido se usa `-j`, (tar.bz2 y tbz es similar a tb2).
 ```bash
 # bz2
 tar -cvfj output.tar.bz2 dir/
@@ -1195,7 +1195,7 @@ tar -xvf input.tar.bz2
 ```
 5. Listar el contenido de un archivo tar:
 ```bash
-tar -tvf input.tar
+tar -tf input.tar
 ```
 6. Extrar un archivo único de un tar:
 ```bash
@@ -1220,7 +1220,7 @@ tar --extract --file=input.tar.bz2 file.txt
 tar xvf input.tar file1.txt file4.jpg
 
 # gzip
-tar cvzf input.tar.gz file2.txt doc.docx
+tar xvzf input.tar.gz file2.txt doc.docx
 
 # bz2
 tar xvfj input.tar.bz2 file3.txt file.xlsx
@@ -1242,6 +1242,7 @@ tar xvfj input.tar.bz2 --wildcards "*.md"
 tar -rvf input.tar input.txt
 ```
 Los comprimidos `tar.gz` y `bz2` no permiten añadir archivos.
+
 10. Excluir archivos o directorios al crear un tar:
 ```bash
 # file
