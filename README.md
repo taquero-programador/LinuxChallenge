@@ -1341,7 +1341,7 @@ Cuando instala una distribución regular, a menudo termina instalando muchos pro
 
 - **LSF es extremadamente flexible**
 
-- **LSF le ofrce mayor seguridad**
+- **LSF le ofrece mayor seguridad**
 
 #### Qué es Gentoo
 Gentoo es un sistema operativo gratuito basado en Linux que puede optimizarse y personalizarse automáticamente para casi cualquier aplicación o necesidad.
