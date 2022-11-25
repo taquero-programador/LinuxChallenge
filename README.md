@@ -1259,3 +1259,50 @@ tar --delete -f input.tar filename.txt
 # dir
 tar --delete -f input.tar dir/dir_to_delete
 ```
+
+## Day 17 - Construir desde la fuente
+Instalar paquetes desde la fuente
+
+#### Lo escencial
+Los proyectos normalmente proporcionan sus aplicaciones como "archivos fuente", escritos en `C`, `C++` u otro lenguaje. Vamos a extraer dicha fuente, no servira de nada hasta que no se compile en un "ejecutable". La primera herramientas es `build-essential`.
+```bash
+sudo apt install build-essential
+```
+
+#### Obtener la fuente
+Probar que ya se tiene `nmpa` haciendo uso de `namp -V` para ver la versión instalada. A continuación `which nmap` para ver dónde está almacenado el ejecutable.
+
+Ahora en la ir a la página del proyecto para los desarrolladores [nmap.org](http://nmap.org/) y tomar la última versión de vanguardia. Ir a la sección descargas, luego "distribución de código de fuente" y seleccionar "tarball de lanzamiento", usar la URL para el archivo `bz2` or `gzip`.
+```txt
+https://nmap.org/dist/nmap-7.93.tar.bz2
+```
+Descargar con `wget`:
+```bash
+wget -c --show-progress https://nmap.org/dist/nmap-7.93.tar.bz2
+```
+- `-c`: permite reanudar la descarga si se interrumpe.
+- `--show-progress`: muestras el progreso de la descarga.
+
+Descomprimir el archivo tar:
+```bash
+tar xvfj https://nmap.org/dist/nmap-7.93.tar.bz2
+```
+Por convención, los archivos de origen suelen incluir en su directorio raíz una serie de archivos de texto en mayúsculas, como: README e INSTALL. 
+
+Ver el archivo INSTALL:
+```bash
+Ideally, you should be able to just type:
+
+./configure
+make
+make install
+
+For far more in-depth compilation, installation, and removal notes,
+read the Nmap Install Guide at https://nmap.org/book/install.html.
+```
+Esto es lo que hace cada uno de los pasos:
+- `./configure`: es un script que verifica un servidor (para ver si está basado en ARM o INTEL, 32 o 64 bits, qué compilador tiene, etc).
+- `make`: compila el software, normalmente llamando al compilado GNU `gcc`. Esto puede generar una gran cantidad de texto de aspecto aterrador y tomar uno o dos minutos, o hasta horas para paquetes como LibreOffice.
+- `make install`: este paso toma los archivos compilados e instala esa documentación más en su sistema, en algunos casos, configurar servicios y tareas programadas. El porceso se instala en todo el sistema para todos los usuarios, por lo que requiere permisos `root` y ejecutar: `sudo make install`.
+
+Este último paso probablemente habrá sobrescrito `nmap`, pero el nuevo se haya instalado en su lugar.
