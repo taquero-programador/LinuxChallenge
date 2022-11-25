@@ -1309,3 +1309,46 @@ Esto es lo que hace cada uno de los pasos:
 - `make install`: este paso toma los archivos compilados e instala esa documentación más en su sistema, en algunos casos, configurar servicios y tareas programadas. El proceso se instala en todo el sistema para todos los usuarios, por lo que requiere permisos `root` y ejecutar: `sudo make install`.
 
 Este último paso probablemente habrá sobrescrito `nmap`, pero la nueva instalación tendra la última versión.
+
+En general, `/bin` es para partes clave del sistema operativo, `/usr/bin` para utilidades menos críticas y `/usr/local/bin` para software que ha elegido instalar manualmente. Cuando escribe un comando, buscará en cada uno de los directorios proporcionados en su variable de entorno `PATH`. 
+
+Con `locate` puede ubicar este nuevo archivo, pero debido a que este nuevo archivo se acaba de agragar, necesitar actualizar el indice de los archivos:
+```bash
+sudo updatedb
+```
+Luego buscar en el índice:
+```bash
+locate bin/nmap
+```
+Esto debería encontrar su antiguo como copias de `nmap`.
+
+Ahora intente ejecutar cada una de ellas, ejemplo:
+```bash
+/usr/bin/nmap -V
+
+/usr/local/bin/nmap -V
+```
+NOTA: Debido a que esta instalación se hizo fuera del manejador de paquetes APT, este binario no recibira actualizaciones.
+
+#### Qué es Linux From Scratch (LFS)
+Linux From Scratch es un proyecto que te proporciona instrucciones paso a paso para contruir tu propio sistema Linux personalizado desde la fuente.
+
+- **Por qué un sistema LSF**  
+LSF le enseña a la gente cómo funciona internamente un sistema Linux. Construir LSF te enseña todo lo que hace que Linux funcione, cómo funcionan las cosas. Y lo más importante, cómo personalizarlo según tus propios gustos y necesidades.
+
+- **Construir LSF produce un sistema Linux muy compacto**  
+Cuando instala una distribución regular, a menudo termina instalando muchos programas que probablemente nunca usarías.
+
+- **LSF es extremadamente flexible**
+
+- **LSF le ofrce mayor seguridad**
+
+#### Qué es Gentoo
+Gentoo es un sistema operativo gratuito basado en Linux que puede optimizarse y personalizarse automáticamente para casi cualquier aplicación o necesidad.
+
+Gracias a una tecnología llamada **Portage**, Gentoo puede convertirse en un servidor seguro ideal, estación de trabajo de desarrollo, computadora de escritorio profesional, sistema de juegos, o casi cualquier cosa.
+
+#### Enlaces
+- [La magia detrás de configure, make y make install](https://thoughtbot.com/blog/the-magic-behind-configure-make-make-install)
+- [Cómo recontruir paquetes Debian](https://raphaelhertzog.com/2010/12/15/howto-to-rebuild-debian-packages/)
+- [Compilar cosas en Ubuntu de forma fácil](https://help.ubuntu.com/community/CompilingEasyHowTo)
