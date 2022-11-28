@@ -1352,3 +1352,10 @@ Gracias a una tecnología llamada **Portage**, Gentoo puede convertirse en un se
 - [La magia detrás de configure, make y make install](https://thoughtbot.com/blog/the-magic-behind-configure-make-make-install)
 - [Cómo recontruir paquetes Debian](https://raphaelhertzog.com/2010/12/15/howto-to-rebuild-debian-packages/)
 - [Compilar cosas en Ubuntu de forma fácil](https://help.ubuntu.com/community/CompilingEasyHowTo)
+
+## Day 18 - Rotación de registro
+Cuando administra un servidor, los registros son su mejor amigo, pero los problemas de espacio en disco pueden ser un problema, las aplicaciones en Linux son generalmente buenas para llevar un registro, pero deben de ser controladas.
+
+Los `logrotate` mantienen su registro bajo control. Con esto, puede elegir cuántos días de registro desea conservar; dividirlos en archivos manejables; comprimirlos para ahorrar espacio, o incluso mantenerlos en un servidor separado.
+
+#### ¿Están rotando sus registros?
