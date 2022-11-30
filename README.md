@@ -1406,7 +1406,7 @@ Analicemos cómo realizar las siguientes operaciones de archivos de registro usa
 -  Especifique la opción de compresión para los archivos de registro rotados
 -  Gire los archivos de registro antiguos con la fecha en el nombre del archivo
 -  Ejecute scripts de shell personalizados inmediatamente después de la rotación de registros
--  Eliminar archivos de registro rotando más antiguos
+-  Eliminar archivos de registro de rotación más antiguos
 
 1. Archivo de configuración `logrotate`  
 Los siguientes son los archivos clave que deben tener en cuenta para que `logrotate` funcione correctamente.
@@ -1462,7 +1462,7 @@ include /etc/logrotate.d
     create 0600 root root
 }
 ```
-2. Opción de tamaño de `logrotate`: rota el archivo de registro cuando el tamaño de archivo alcanza un límite específico  
+2. Opción `logrotate size`: rota el archivo de registro cuando el tamaño de archivo alcanza un límite específico  
 Si desea rotar un archivo de registro (por ejemplo, `/tmp/output.log`) por cada 1 KB, creé `logrotate.conf` como se muestra a continuación:
 ```bash
 # se puede añadir a logrotate.conf o a un nuevo archivo en /etc/logrotate.d
@@ -1475,11 +1475,11 @@ Si desea rotar un archivo de registro (por ejemplo, `/tmp/output.log`) por cada 
 }
 ```
 Esta configuración tiene las siguientes tres opciones:
-- size 1k: se ejecuta solo si el tamaño del archivo es igual o mayor a este tamaño
-- create: gire el archivo original y creé el nuevo archivo con los permisos, el usuario y el grupo especificado
-- rotate: limita el número de rotaciones de archivos de registro. Por lo tanto, esto mantendría los últimos 4 archivos de registros rotados.
-- compress: comprime el archivo
-- su: por cuestiones de permisos
+- `size`: se ejecuta solo si el tamaño del archivo es igual o mayor a este tamaño
+- `create` gire el archivo original y creé el nuevo archivo con los permisos, el usuario y el grupo especificado
+- `rotate`: limita el número de rotaciones de archivos de registro. Por lo tanto, esto mantendría los últimos 4 archivos de registros rotados.
+- `compress`: comprime el archivo
+- `su`: por cuestiones de permisos
 
 Antes de la rotación, este es el tamaño de `output.log`:
 ```bash
@@ -1510,9 +1510,9 @@ Recuerde que después de la rotación de registro, el archivo de registro corres
         rotate 4
 }
 ```
-`copytruncate` indica a `logrotate` que creé la copia del archivo original (es decir, girel el archivo de registro original) y trunca el archivo original a un tamaño de bytes ceros. Esto ayuda a que el servicio respectivo que pertence a ese archivo de registro pueda escribir en el archivo adecuado.
+`copytruncate` indica a `logrotate` que creé la copia del archivo original (es decir, gire el archivo de registro original) y trunca el archivo original a un tamaño de bytes ceros. Esto ayuda a que el servicio respectivo que pertence a ese archivo de registro pueda escribir en el archivo adecuado.
 
-4. Opción de compresión `logrotate`: comprime los archivos de registros rotados  
+4. Opción `logrotate compress`: comprime los archivos de registros rotados  
 Si usa la opción de compresión como se muestra a continuación, los archivos girados se comprimiran con la utilidad `gzip`.
 ```bash
 /tmp/output.log {
@@ -1571,7 +1571,7 @@ Diaria:
 }
 ```
 
-7. Opción `logrotate` postrotate endscript: ejecute un script personalizado inmediatamente después de la rotación de registros.  
+7. Opción `logrotate postrotate endscript`: ejecute un script personalizado inmediatamente después de la rotación de registros.  
 La siguiente configuración indica que ejecutará `myscript.sh` después de `logrotate`.
 ```bash
 /tmp/output.log {
