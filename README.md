@@ -413,7 +413,7 @@ El comando `history` lista todos los comandos ejecutados en la terminal.
 # listar todos los comandos ejecutados
 history
 ```
-Usando `!` junto a un número traera/ejecutara el comando del historial.
+Usando `!` junto a un número traera/ejecutará el comando del historial.
 ```bash
 !20
 ```
@@ -668,7 +668,7 @@ Programador de tareas no repetitivas
 #### Temporizador de sistema
 [Enlace](https://wiki.archlinux.org/title/Systemd/Timers)
 
-Systemd ahora incluido en casi todas las distribuciones Linux, también se puede usar para ejecutar tareas programadas en momentos especificos. Ver cuáles ya están configurados:
+Systemd ahora incluido en casi todas las distribuciones Linux, también se puede usar para ejecutar tareas programadas en momentos específicos. Ver cuáles ya están configurados:
 ```bash
 systemctl list-timers
 ```
@@ -1359,3 +1359,267 @@ Cuando administra un servidor, los registros son su mejor amigo, pero los proble
 Los `logrotate` mantienen su registro bajo control. Con esto, puede elegir cuántos días de registro desea conservar; dividirlos en archivos manejables; comprimirlos para ahorrar espacio, o incluso mantenerlos en un servidor separado.
 
 #### ¿Están rotando sus registros?
+Existe el directorio `/var/log` y pudede haber subdirectorios como `/var/log/apache2`. Debería haber un un archivo `/var/los/syslog` y un par de archivos `syslog.1.gz, syslog.2.gz`, lo cual son versiones antiguas comprimidas.
+
+#### ¿Cuándo giran?
+`Cron` generalmente está configurado para ejecutar un script en `/etc/cron.daily`, así que ahí debería ver un script llamado `logrotate` o posiblemente `00logrotate` para forzarlo a que sea la primera tarea a ejecutar.
+
+#### Configurar logrotate
+La configuración general se establece en `/etc/logrotate.conf`, debe existir un directorio `/etc/logrotate.d`, ya que el contenido de estos se fusiona con configuración completa.
+```bash
+# /etc/logrotate.d/apache2
+# el archivo principal es logrotate.conf, dentro del archivo llama a logrotate.d
+# que contiene diferentes archivos para cada servicio que a su vez
+# hace un service_name/*.log
+
+/var/log/apache2/*.log {
+    daily
+    missingok
+    rotate 14
+    compress
+    delaycompress
+    notifempty
+    create 640 root adm
+    sharedscripts
+    prerotate
+	if [ -d /etc/logrotate.d/httpd-prerotate ]; then
+	    run-parts /etc/logrotate.d/httpd-prerotate
+	fi
+    endscript
+    postrotate
+	if pgrep -f ^/usr/sbin/apache2 > /dev/null; then
+	    invoke-rc.d apache2 reload 2>&1 | logger -t apache2.logrotate
+	fi
+    endscript
+}
+```
+Qué hace el archivo: cualquier archivo `[apache2]*.log` se rotará cada semana y se guardarán 52 copias comprimidas.
+
+Por lo general, cuando instala una aplicación, se instala una "receta" de logrotate adecuada, por lo que normalmente no creará estos desde cero. Sin embargo, la configuración predeterminada no siempre coincidirá con sus requisisto, por lo que es perfectamente razonable que los edite.
+
+#### Ejemplos logrotate
+Analicemos cómo realizar las siguientes operaciones de archivos de registro usando la utilidad `logrotate`
+
+-  Girar el archivo de registro cuando el tamaño del archivo alcance un tamaño específico
+-  Continúe escribiendo la información de registro en el archivo recién creado después de rotar el archivo de registro anterior
+-  Comprimir los archivos de registro rotados
+-  Especifique la opción de compresión para los archivos de registro rotados
+-  Gire los archivos de registro antiguos con la fecha en el nombre del archivo
+-  Ejecute scripts de shell personalizados inmediatamente después de la rotación de registros
+-  Eliminar archivos de registro rotando más antiguos
+
+1. Archivo de configuración `logrotate`  
+Los siguientes son los archivos clave que deben tener en cuenta para que `logrotate` funcione correctamente.
+
+- `/usr/bin/logrotate`: el propio comando `logrotate`
+- `/etc/cron.daily/logrotate`: este script ejecuta el comando `logrotate` todos los días
+```bash
+#!/bin/sh
+
+#  ...
+
+/usr/sbin/logrotate /etc/logrotate.conf
+EXITVALUE=$?
+if [ $EXITVALUE != 0 ]; then
+    /usr/bin/logger -t logrotate "ALERT exited abnormally with [$EXITVALUE]"
+fi
+exit 0
+```
+`/etc/logrotate.conf`: la configuración de rotación de registro para todos los archivos de registro se especifican en este archivo:
+```bash
+# see "man logrotate" for details
+
+# global options do not affect preceding include directives
+
+# rotate log files weekly
+weekly
+
+# keep 4 weeks worth of backlogs
+rotate 4
+
+# create new (empty) log files after rotating old ones
+create
+
+# use date as a suffix of the rotated file
+#dateext
+
+# uncomment this if you want your log files compressed
+#compress
+
+# packages drop log rotation information into this directory
+include /etc/logrotate.d
+
+# system-specific logs may also be configured here.
+
+```
+`/etc/logrotate.d`: cuando se instalan paquetes individuales en el sistema, colocan la información de configuración de rotación de registros en el directorio. Por ejemplo, la información de configuración de rotación de registro `yum` se muestra a continuación:
+```bash
+/var/log/yum.log {
+    missingok
+    notifempty
+    size 30k
+    yearly
+    create 0600 root root
+}
+```
+2. Opción de tamaño de `logrotate`: rota el archivo de registro cuando el tamaño de archivo alcanza un límite específico  
+Si desea rotar un archivo de registro (por ejemplo, `/tmp/output.log`) por cada 1 KB, creé `logrotate.conf` como se muestra a continuación:
+```bash
+# se puede añadir a logrotate.conf o a un nuevo archivo en /etc/logrotate.d
+/tmp/output.log {
+        size 1k
+        create 700 user user
+        compress
+        rotate 4
+        su user user # por detalles de permisos
+}
+```
+Esta configuración tiene las siguientes tres opciones:
+- size 1k: se ejecuta solo si el tamaño del archivo es igual o mayor a este tamaño
+- create: gire el archivo original y creé el nuevo archivo con los permisos, el usuario y el grupo especificado
+- rotate: limita el número de rotaciones de archivos de registro. Por lo tanto, esto mantendría los últimos 4 archivos de registros rotados.
+- compress: comprime el archivo
+- su: por cuestiones de permisos
+
+Antes de la rotación, este es el tamaño de `output.log`:
+```bash
+ls -lh /tmp/salida.log
+# salida
+-rw-r--r-- 1 bala bala 25868 2010-06-09 21:19 /tmp/output.log
+```
+Ejecutar el comando con la opción `-s`:
+```bash
+sudo logrotate -s /var/log/logstatus logrotate.conf
+```
+NOTA: cada vez que necesite la rotación de registro, debera ejecutarlo manualmente.
+
+Eventualmente, esto continuará siguiendo la configuración de los archivos de registro rotados:
+- `output.log.4`
+- `output.log.3`
+- `output.log.2`
+- `output.log.1`
+- `output.log`
+
+Recuerde que después de la rotación de registro, el archivo de registro corresponde al servicio y aún apunta al archivo rotado `output.log.1` y seguira escribendo en el.
+
+3. Opción `logrotate copytruncate`: continúe escribiendo la información de registro en el archivo recién creado después de rotar el archivo de registro antiguo.
+```bash
+/tmp/output.log {
+        size 1k
+        copytruncate
+        rotate 4
+}
+```
+`copytruncate` indica a `logrotate` que creé la copia del archivo original (es decir, girel el archivo de registro original) y trunca el archivo original a un tamaño de bytes ceros. Esto ayuda a que el servicio respectivo que pertence a ese archivo de registro pueda escribir en el archivo adecuado.
+
+4. Opción de compresión `logrotate`: comprime los archivos de registros rotados  
+Si usa la opción de compresión como se muestra a continuación, los archivos girados se comprimiran con la utilidad `gzip`.
+```bash
+/tmp/output.log {
+        size 1k
+        copytruncate
+        create 700 user user
+        rotate 4
+        compress
+}
+```
+Los archivos de salida serán `output.log.1.gz`.
+
+5. Opción `logrotate dateext`: gire el archivo de registro anterior con la fecha en el nombre de la fecha de registro.
+```bash
+/tmp/output.log {
+        size 1k
+        copytruncate
+        create 700 user user
+        dateext
+        rotate 4
+        compress
+}
+```
+El resultado debería ser algo como:
+```bash
+output.log
+output.log-20221130.gz
+```
+ESto funciona solo una vez en el día. Porque cuando intente rotar la próxima vez en el mismo día, el archivo rotado anteriormente tendra el mismo nombre.
+
+6. Opción `logrotate` mensual, diaria, semanal: hacer una vez al mes.
+```bash
+/tmp/output.log {
+        monthly
+        copytruncate
+        rotate 4
+        compress
+}
+```
+Semanal:
+```bash
+/tmp/output.log {
+        weekly
+        copytruncate
+        rotate 4
+        compress
+}
+```
+Diaria:
+```bash
+/tmp/output.log {
+        daily
+        copytruncate
+        rotate 4
+        compress
+}
+```
+
+7. Opción `logrotate` postrotate endscript: ejecute un script personalizado inmediatamente después de la rotación de registros.  
+La siguiente configuración indica que ejecutará `myscript.sh` después de `logrotate`.
+```bash
+/tmp/output.log {
+        size 1k
+        copytruncate
+        rotate 4
+        compress
+        postrotate
+            /home/user/myscript.sh
+        endscript
+}
+```
+
+8. Opción `logrotate maxage`: elimine los archivos de registro más antiguos  
+Elimina automáticamente los archivos rotados después de un número especifico de días. El siguiente ejemplo elimina los archivos de rotación después de 100 días.
+```bash
+/tmp/output.log {
+        size 1k
+        copytruncate
+        rotate 4
+        compress
+        maxage 100
+}
+```
+
+9. Opción `missingok`: no devolvera el error si falta el archivo de registro
+```bash
+/tmp/output.log {
+        size 1k
+        copytruncate
+        rotate 4
+        compress
+        missingok
+}
+```
+
+10. Opción `compresscmd` y `compressext`: especifica el comando de compresión para los archivos de rotación
+```bash
+/tmp/output.log {
+        size 1k
+        copytruncate
+        create
+        compress
+        compresscmd /bin/bzip2
+        compressext .bz2
+        rotate 4
+}
+```
+- `compress`: indica que se debe hacer la compresión
+- `compresscmd`: especifica el comando para la compresión
+- `compressext`: especifica la extensión del archivo
