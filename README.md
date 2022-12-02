@@ -1700,3 +1700,368 @@ Enlaces simbólicos:
 - [Anatomía del sistema de archivos Linux](https://developer.ibm.com/tutorials/l-linux-filesystem/)
 - [Enlaces duros y blandos](https://linuxgazette.net/105/pitcher.html)
 - [Inodos](https://www.howtogeek.com/465350/everything-you-ever-wanted-to-know-about-inodes-on-linux/)
+
+## Day 20 - Creación de scripts
+Al escribir en la línea de comandos de Linux, se está comunicando directamente con "el intérprete de comandos", también conocido como "el shell". Normalmente este shell es `bash`, por lo que cuando encadena comandos para crear un script, el resultado puede llamarse "script de shell" o "script de bash".
+
+¿Por qué hacer un script en lugar de simplemente escribir comando manualmente?
+- Se ahorra teclear.
+- Parametros: un script se puede usar para hacer varías cosas según los parámetros que proporcione.
+- Automatización: inserte su secuencia de comando en `/etc/cron.daily` y se ejecutara todos los días, o instale un enlace simbólico en la carpeta `/etc/ec.d` correspondiente y puede hacer que se ejecute cada vez que se apaga o inicia el sistema.
+
+#### Comenzar con un shebang
+Los scripts son solo archivos de texto simples, pero si establece los permisos de ejecución en ellos, el sistema buscará una línea especial que comience con los dos caracteres `#` y `!`, demoninados `shebang`.
+
+Esta línea normalmente se ve así:
+```bash
+#!/bin/bash
+```
+Normalmente cualquier cosa que comience con `#` se trataría como un comentario, pero en la primera línea seguido de un `!`, se interpreta como: "por favor envíe el resto de esto a `/bin/bash`". Por lo que un script para Perl sería `#!/usr/bin/perl` y en Python `#!/usr/bin/env python3`.
+
+#### El primer script
+Enumerar quién a intentado iniciar sesión en un servidor sin éxito más recientemente, usando la entrada `var/log/auth.log`.
+```bash
+ #!/bin/bash
+ #
+ #   attacker - prints out the last failed login attempt
+ #
+ echo "The last failed login attempt came from IP address:"
+ grep -i "disconnected from" /var/log/auth.log|tail -1| cut -d: -f4| cut -f7 -d" "
+```
+Hacerlo ejecutable:
+```bash
+chmod +x scr.sh
+```
+Ahora para ejecutar el script, solo necesita referirse a él por su nombre, pero el directorio actual no está en su `$PATH`, por lo que debe hacerlo de dos maneras.
+```bash
+/home/user/scr.sh
+# or
+./scr.sh
+```
+Una ves que esté satisfecho y quiera tenerlos fácilmente disponible. puede moverlo a algún lugar de su `$PATH`, y `/usr/local/bin` es normalmente el lugar más apropiado:
+```bash
+sudo mv scr.sh /usr/local/bin/
+```
+
+#### Extender el script
+Expandir el script para requerir un parámetro e imprimir alguna ayuda de sintaxis cuando no proporcione una.
+```bash
+ #
+ ##   topattack - list the most persistent attackers
+ #
+ if [ -z "$1" ]; then
+ echo -e "\nUsage: `basename $0` <num> - Lists the top <num> attackers by IP"
+ exit 0
+ fi
+ echo " "
+ echo "Persistant recent attackers"
+ echo " "
+ echo "Attempts      IP "
+ echo "-----------------------"
+ grep "Disconnected from authenticating user root" /var/log/auth.log|cut -d: -f 4 | cut -d" " -f7|sort |uniq -c |sort -nr |head -$1
+```
+
+#### Bash script tutorial
+
+##### Hello world
+Averiguar dónde se encuentra el intérprete de Bash:
+```bash
+#!/bin/bash
+
+# declarar una variable STRING
+STRING="Hola mundo!"
+# imprimir la variable en pantalla
+echo $STRING
+```
+
+##### Script simple de copia de seguridad
+```bash
+#!/bin/bash
+
+tar cvzf home_backup.tar.gz /home/user
+```
+
+##### Variables en scripts
+Volviendo al ejemplo del respaldo, usemos una variable para nombrar nuestro archivo de respaldo y coloquemos una marca de tiempo en el nombre del archivo usando `date`:
+```bash
+#!/bin/bash
+
+OF=home_backup$(date +%Y%m%d).tar.gz
+tar -cvzf $OF --absolute-names /home/user
+```
+
+##### Variables globales y locales
+En las secuencias de comandos de Bash, una variable global es una variable que se puede usar en cualquier lugar de la secuencia de comandos. Una variable local solo se usará dentro de la función donde se declara.
+```bash
+#!/bin/bash
+
+# variable global
+VAR="global variable"
+
+function bash {
+    # define una variable local bash
+    # solo para la funcion de variable local
+    local VAR="local variable"
+    echo $VAR
+}
+
+echo $VAR
+bash # ejecuta la función
+# la variable global no cambia
+# "local" es una variable reservada para bash
+echo $VAR
+```
+Resultado:
+```bash
+global variable
+local variable
+global variable
+```
+
+##### Pasar argumentos a un script Bash
+Al ejecutar un script Bash, es posible pasar argumento en su comando
+```bash
+#!/bin/bash
+
+# usar variables predefinidas para acceder a los argumentos pasados
+echo $1 $2 $3 ' -> echo $1 $2 $3'
+
+# también podemos almacenar argumentos de la línea de comandos de bash en una matriz especial
+args=("$@")
+echo ${args[0]} ${args[1]} ${args[2]} ' -> args=("$@"); echo ${args[0]} ${args[1]} ${args[2]}'
+
+# use $@ para imprimir todos los argumentos a la vez
+echo $@ ' -> echo $@'
+
+# use la variable $# para imprimir
+# número de argumentos pasados al script bash
+echo Number of arguments passed: $# ' -> echo Number of arguments passed: $#'
+```
+Resultado:
+```bash
+./bash.sh bash script tutorial
+
+# salida
+bash script tutorial  -> echo $1 $2 $3
+bash script tutorial  -> args=("$@"); echo ${args[0]} ${args[1]} ${args[2]}
+bash script tutorial  -> echo $@
+Number of arguments passed: 3  -> echo Number of arguments passed: $#
+```
+
+##### Ejecutar comando de Shell con Bash
+La mejor manera de ejecutar un comando de shell separado dentro de un script de Bash, es creando un nuevo subshell a través de la sintaxix `$()`.
+```bash
+#!/bin/bash
+
+# usar un subshell $() para ejecutar un comando shell
+echo $(uname -o)
+
+# ejecutar sin un subshell
+echo uname -o
+```
+Resultado:
+```bash
+GNU/Linux
+uname -o
+```
+
+##### Lectura de la entrade del usuario
+Podemos usar `read` para leer la entrada del usuario. Esto permite que un usuario interactúe con un script de Bash y ayude a dictar la forma en que procede.
+```bash
+#!/bin/bash
+
+echo -e "Hola, ingrese una palabra: \c "
+read word
+echo "La palabra que ingreso es: $word"
+
+echo -e "Puede ingresar dos palabras? "
+read word1 word2
+echo "Aquí está la entrada: \"$word1\" \"$word2\""
+
+echo -e "Cómo se siente con los scripts de bash?"
+read
+echo "Dijiste $REPLY "
+
+echo -e "Cuál es tu color favorito? "
+read -a color
+echo "My favorite colours are also ${colours[0]}, ${colours[1]} and ${colours[2]}:-)"
+```
+Resultado:
+```bash
+Hi, please type the word: Linuxconfig.org
+The word you entered is: Linuxconfig.org
+Can you please enter two words?
+Debian Linux
+Here is your input: "Debian" "Linux"
+How do you feel about bash scripting?
+good
+You said good, I'm glad to hear that!
+What are your favorite colours ?
+blue green black
+My favorite colours are also blue, green and black:-)
+```
+
+##### Comando Bash trap
+El comando `trap` se puede usar en scripts Bash para capturar señales enviadas al script y luego ejecuta una subrutina cuando ocurre. El siguiente script detacta un `ctrl+c`:
+```bash
+#!/bin/bash
+
+# bash trap command
+trap bashtrap INT
+# limpia el comando en pantalla
+clear;
+
+# la función bashtrap será ejecutada cuando se precione ctrl+c
+# imprimira el mensaje => Executing bash trap subrutine!
+bashtrap()
+{
+    echo "CTRL+C Detected!... executing basg trap!"
+}
+
+# foor loop
+for a in `seq 1 10`; do
+    echo "$a/10 to Exit."
+    sleep 1;
+done
+echo "Exit bash trap example!"
+```
+Resultado:
+```bash
+1/10 to Exit.
+2/10 to Exit.
+^CCTRL+C Detected !...executing bash trap !
+3/10 to Exit.
+4/10 to Exit.
+5/10 to Exit.
+6/10 to Exit.
+7/10 to Exit.
+^CCTRL+C Detected !...executing bash trap !
+8/10 to Exit.
+9/10 to Exit.
+10/10 to Exit.
+Exit Bash Trap Example!!!
+```
+
+##### Arrays
+Bash es capaz de almacenar valores en arrays
+##### Declarar array simples
+```bash
+#!/bin/bash
+
+# declarar array con 4 elementos
+ARRAY=('Debian Linu' Linux Ubuntu FreeBSD)
+# obtener el número de elementos de un array
+ELEMENTS=${#ARRAY[@]}
+
+# hacer un echo de los elementos del array
+for ((i=0;i<ELEMENTS;i++)); do
+    echo ${ARRAY[${i}]}
+done
+```
+Resultado:
+```bash
+Debian Linu
+Linux
+Ubuntu
+FreeBSD
+```
+
+##### Leer archivos en array bash
+En lugar de completar todos los elementos de un array dentro de un script Bash, podemos programar nuestra secuencia de comandos para leer la entrada y colocarla en un array:
+```bash
+#!/bin/bash
+
+# declarar array
+declare -a ARRAY
+# vincular con 10 stdin
+exec 10<&0
+# stind remplazado con un archivo proporcionado como primer argumento
+exec < $1
+let count=0
+
+while read LINE; do
+    ARRAY[$count]=$LINE
+    ((count++))
+done
+
+echo Número de elementos: ${#ARRAY[0]}
+# echo del contenido del array
+echo ${ARRAY[@]}
+# restaurar stdin desde filedescriptor 10
+# y cerear filedescriptor 10
+exec 0<&10 10<&-
+```
+Resultado:
+```bash
+./bash.sh file.txt
+
+# salida
+Número de elementos: 4
+Bash Scripting Tutorial Guide
+```
+
+##### Bash declaraciones if/else/fi
+Aquí hay una declaración sencilla `if` que compruebe si existe un directorio. Dependiendo del resultado, hará una de dos cosas. Tenga en cuenta el espacio dentro de [ ... ], sin los espacios no funcionará.
+```bash
+#!/bin/bash
+
+directorio="~/.ssh"
+
+# checka la existencia del directorio
+if [ -d $directorio  ]; then
+    echo "Directory exists!"
+else
+    echo "Directory does not existe!"
+fi
+```
+Resultado:
+```bash
+Directory does not existe!
+```
+
+##### Anidado if/else
+Es posible colocar una declaración `if` dentro de otra `if`.
+```bash
+#!/bin/bash
+
+# declarar una variable y asignarle 4
+choice=4
+# imprimir la salida
+    echo "1. Bash"
+    echo "2. Scripting"
+    echo "3. Tutorial"
+    echo -n "Selecciona una palabra [1, 2 or 3]"
+# bucle mientras la variable sea 4
+while [ $choice -eq 4  ]; do
+# lee la entrada del usuario
+read choice
+# bash anidado
+if [ $choice -eq 1  ]; then
+    echo "Seleccionaste Bash"
+else
+    if [ $choice -eq 2   ]; then
+        echo "Seleccionaste Scripting"
+    else
+        if [ $choice -eq 3  ]; then
+            echo "Seleccionaste Tutorial"
+        else
+            echo "Selecciona una palabra entre 1-3"
+            echo "1. Bash"
+            echo "2. Scripting"
+            echo "3. Tutorial"
+            echo -n "Selecciona una palabra [1, 2 or 3]"
+            choice=4
+        fi
+    fi
+fi
+done
+```
+Resultado:
+```bash
+1. Bash
+2. Scripting
+3. Tutorial
+Selecciona una palabra [1, 2 or 3]
+```
+
+##### Comparación de Bash
