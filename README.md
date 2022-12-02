@@ -440,7 +440,7 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=10000000
 SAVEHIST=10000000
 ```
-[Referencía](https://www.digitalocean.com/community/tutorials/how-to-use-bash-history-commands-and-expansions-on-a-linux-vps).
+[Referencia](https://www.digitalocean.com/community/tutorials/how-to-use-bash-history-commands-and-expansions-on-a-linux-vps).
 
 ## Day 6 - VIM
 
@@ -1623,3 +1623,80 @@ Elimina automáticamente los archivos rotados después de un número especifico 
 - `compress`: indica que se debe hacer la compresión
 - `compresscmd`: especifica el comando para la compresión
 - `compressext`: especifica la extensión del archivo
+
+## Day 19 - Inodos, enlaces simbólicos y otros atajos 
+Linux es compatible con una gran cantidad de "sistemas de archios" diferentes, aunque en un servidor normalmente tratará con `ext3` o `ext4` y quizás `btrfs`; en cambio, en la capa de Linux que se encuentra por encima de todos estos: el sistemas de archivos virtuales de Linux.
+
+El VFS es una parte clave de Linux, y una descripcón general de él y algunos de los conceptos que lo rodean es muy útil para administrar un sistema de confianza.
+
+#### La siguiente capa hacia abajo
+Linux tiene una capa adicional entre el nombre del archivo y los datos reales del archivo en el disco: este es el `inodo`. Esto tiene un valor númérico que puede ver más fácilmente de dos maneras:
+
+Los `-i` enciende con `ls` el dominio:
+```bash
+ls -li /etc/hosts
+```
+Los `stat` dominio:
+```bash
+stat /etc/hosts
+
+# salida
+  Fichero: /etc/hosts
+  Tamaño: 236       	Bloques: 8          Bloque E/S: 4096   fichero regular
+Dispositivo: 801h/2049d	Nodo-i: 8390452     Enlaces: 1
+Acceso: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+      Acceso: 2022-12-01 22:09:23.208162191 -0600
+Modificación: 2022-10-07 23:00:30.852773787 -0500
+      Cambio: 2022-10-07 23:00:30.940778009 -0500
+    Creación: 2022-10-07 23:00:30.848773595 -0500
+```
+Cada nombre de archivo "apunta" a un inodo, que a su vez apunta a los datos reales en disco. Esto significa que varios nombres de archivo podrían apuntar al mismo inodoy, por lo tanto, tener exactamene el mismo contenido. De hecho, esta es una técnica estándar, llamada "vinculo duro". La otra cosa importante a tener en cuenta es que cuando vemos los permisos, la propiedad y las fechas de los nombres de archivos, estos atributos en realidad se mantienen en el nivel de inodo, no en
+el nombre de archivo. La mayor parte del tiempo, esta distinción es solo teórica, pero puede ser muy importante.
+
+#### Dos tipos de enlaces
+Pasos para conocer un poco sobre los enlaces suvaes y duros.
+Usar `ln` para crear un enlace duro:
+```bash
+sudo ln /etc/passwd link1
+```
+Enlace simbólico:
+```bash
+sudo ln -s /etc/passwd link2
+```
+Usar `ls -li` para ver los archivos resultantes.
+
+Tenga en cuenta que los permisos en un enlace simbólicos generalmente muestra que permite todos, pero lo que importa es el permiso del archivo al que apunta.
+
+Tanto los enlaces físicos como los simbólicos se usan ampliamente de n Linux, pero los enlaces simbólicos son especialmente comunes, por ejemplo:
+```bash
+ls -ltr /etc/rc2.d/*
+```
+Este directorio contiene todos los scripts que se inician cuando su máquina cambia al "nivel de ejecución 2" (su estado normal de ejecución), pero veŕa que, de hecho, la mayoría de ellos son enlaces simbólicos a los scripts reales en `/etc/init.d`.
+
+También es común tener algo como:
+```bash
+prog
+prog-v3
+prog-v4
+```
+Donde el programa `prog`, es un enlace simbólico, originalmente a v3, pero ahora paunta a v$ (y podría apuntar hacia atrás si es necesario).
+
+#### Las diferencias
+Enlaces duros:
+- Solo son enlaces a un archivo, no a un directorio.
+- No se puede hacer referencia a un archivo en un disco/volumen diferente.
+- Los enlaces harán referencia a un archivo incluso si se mueve.
+- Los enlaces hacen referencia a inodos/ubicaciones físicas en el disco.
+
+Enlaces simbólicos:
+- Puede enlazar directorios.
+- Puede hacer referencia a un archivo/carpeta en un disco duro/volumen diferente.
+- Los enlaces permancen si se elimina el archivo original.
+- Los enlaces no volverán a hacer referencia al archivo si se mueve
+- Los enlaces hacen referencia a nombres de archios/directorios abstractos y no a ubicaciones físicas.
+- Tienen su propio inodo.
+
+[Anatomía del sistema de archivos Linux](https://developer.ibm.com/tutorials/l-linux-filesystem/).
+
+- [Enlaces duros y blandos](https://linuxgazette.net/105/pitcher.html).
+- [Inodos](https://www.howtogeek.com/465350/everything-you-ever-wanted-to-know-about-inodes-on-linux/).
