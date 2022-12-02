@@ -1400,19 +1400,19 @@ Por lo general, cuando instala una aplicación, se instala una "receta" de logro
 #### Ejemplos logrotate
 Analicemos cómo realizar las siguientes operaciones de archivos de registro usando la utilidad `logrotate`
 
--  Girar el archivo de registro cuando el tamaño del archivo alcance un tamaño específico
--  Continúe escribiendo la información de registro en el archivo recién creado después de rotar el archivo de registro anterior
--  Comprimir los archivos de registro rotados
--  Especifique la opción de compresión para los archivos de registro rotados
--  Gire los archivos de registro antiguos con la fecha en el nombre del archivo
--  Ejecute scripts de shell personalizados inmediatamente después de la rotación de registros
--  Eliminar archivos de registro de rotación más antiguos
+-  Girar el archivo de registro cuando el tamaño del archivo alcance un tamaño específico.
+-  Continúe escribiendo la información de registro en el archivo recién creado después de rotar el archivo de registro anterior.
+-  Comprimir los archivos de registro rotados.
+-  Especifique la opción de compresión para los archivos de registro rotados.
+-  Gire los archivos de registro antiguos con la fecha en el nombre del archivo.
+-  Ejecute scripts de shell personalizados inmediatamente después de la rotación de registros.
+-  Eliminar archivos de registro de rotación más antiguos.
 
 1. Archivo de configuración `logrotate`  
 Los siguientes son los archivos clave que deben tener en cuenta para que `logrotate` funcione correctamente.
 
-- `/usr/bin/logrotate`: el propio comando `logrotate`
-- `/etc/cron.daily/logrotate`: este script ejecuta el comando `logrotate` todos los días
+- `/usr/bin/logrotate`: el propio comando `logrotate`.
+- `/etc/cron.daily/logrotate`: este script ejecuta el comando `logrotate` todos los días.
 ```bash
 #!/bin/sh
 
@@ -1475,11 +1475,11 @@ Si desea rotar un archivo de registro (por ejemplo, `/tmp/output.log`) por cada 
 }
 ```
 Esta configuración tiene las siguientes tres opciones:
-- `size`: se ejecuta solo si el tamaño del archivo es igual o mayor a este tamaño
-- `create` gire el archivo original y creé el nuevo archivo con los permisos, el usuario y el grupo especificado
-- `rotate`: limita el número de rotaciones de archivos de registro. Por lo tanto, esto mantendría los últimos 4 archivos de registros rotados.
-- `compress`: comprime el archivo
-- `su`: por cuestiones de permisos
+- `size`: se ejecuta solo si el tamaño del archivo es igual o mayor a este tamaño.
+- `create` gire el archivo original y creé el nuevo archivo con los permisos, el usuario y el grupo especificado.
+- `rotate`: limita el número de rotaciones de archivos de registro. Por lo tanto, esto mantendría los últimos 4 archivos de registros rotados..
+- `compress`: comprime el archivo.
+- `su`: por cuestiones de permisos.
 
 Antes de la rotación, este es el tamaño de `output.log`:
 ```bash
@@ -1620,9 +1620,9 @@ Elimina automáticamente los archivos rotados después de un número especifico 
         rotate 4
 }
 ```
-- `compress`: indica que se debe hacer la compresión
-- `compresscmd`: especifica el comando para la compresión
-- `compressext`: especifica la extensión del archivo
+- `compress`: indica que se debe hacer la compresión.
+- `compresscmd`: especifica el comando para la compresión.
+- `compressext`: especifica la extensión del archivo.
 
 ## Day 19 - Inodos, enlaces simbólicos y otros atajos 
 Linux es compatible con una gran cantidad de "sistemas de archivos" diferentes, aunque en un servidor normalmente tratará con `ext3` o `ext4` y quizás `btrfs`; en cambio, en la capa de Linux que se encuentra por encima de todos estos: el sistemas de archivos virtuales de Linux.
@@ -1692,10 +1692,11 @@ Enlaces simbólicos:
 - Puede enlazar directorios.
 - Puede hacer referencia a un archivo/carpeta en un disco duro/volumen diferente.
 - Los enlaces permancen si se elimina el archivo original.
-- Los enlaces no volverán a hacer referencia al archivo si se mueve
+- Los enlaces no volverán a hacer referencia al archivo si se mueve.
 - Los enlaces hacen referencia a nombres de archios/directorios abstractos y no a ubicaciones físicas.
 - Tienen su propio inodo.
 
-- [Anatomía del sistema de archivos Linux](https://developer.ibm.com/tutorials/l-linux-filesystem/).
-- [Enlaces duros y blandos](https://linuxgazette.net/105/pitcher.html).
-- [Inodos](https://www.howtogeek.com/465350/everything-you-ever-wanted-to-know-about-inodes-on-linux/).
+#### Enlaces
+- [Anatomía del sistema de archivos Linux](https://developer.ibm.com/tutorials/l-linux-filesystem/)
+- [Enlaces duros y blandos](https://linuxgazette.net/105/pitcher.html)
+- [Inodos](https://www.howtogeek.com/465350/everything-you-ever-wanted-to-know-about-inodes-on-linux/)
