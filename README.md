@@ -2064,4 +2064,4 @@ Resultado:
 Selecciona una palabra [1, 2 or 3]
 ```
 
-##### Comparación de Bash
+##### Comparaciones de Bash
