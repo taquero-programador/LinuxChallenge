@@ -1707,7 +1707,7 @@ Al escribir en la línea de comandos de Linux, se está comunicando directamente
 ¿Por qué hacer un script en lugar de simplemente escribir comando manualmente?
 - Se ahorra teclear.
 - Parametros: un script se puede usar para hacer varías cosas según los parámetros que proporcione.
-- Automatización: inserte su secuencia de comando en `/etc/cron.daily` y se ejecutara todos los días, o instale un enlace simbólico en la carpeta `/etc/ec.d` correspondiente y puede hacer que se ejecute cada vez que se apaga o inicia el sistema.
+- Automatización: inserte su secuencia de comando en `/etc/cron.daily` y se ejecutara todos los días, o instale un enlace simbólico en la carpeta `/etc/rc.d` correspondiente y puede hacer que se ejecute cada vez que se apaga o inicia el sistema.
 
 #### Comenzar con un shebang
 Los scripts son solo archivos de texto simples, pero si establece los permisos de ejecución en ellos, el sistema buscará una línea especial que comience con los dos caracteres `#` y `!`, demoninados `shebang`.
@@ -1732,7 +1732,7 @@ Hacerlo ejecutable:
 ```bash
 chmod +x scr.sh
 ```
-Ahora para ejecutar el script, solo necesita referirse a él por su nombre, pero el directorio actual no está en su `$PATH`, por lo que debe hacerlo de dos maneras.
+Ahora para ejecutar el script, solo necesita referirse a él por su nombre, pero el directorio actual no está en su `$PATH`, por lo que puede hacerlo de dos maneras.
 ```bash
 /home/user/scr.sh
 # or
@@ -1746,7 +1746,7 @@ sudo mv scr.sh /usr/local/bin/
 #### Extender el script
 Expandir el script para requerir un parámetro e imprimir alguna ayuda de sintaxis cuando no proporcione una.
 ```bash
- #
+ #!/bin/bash
  ##   topattack - list the most persistent attackers
  #
  if [ -z "$1" ]; then
@@ -1764,7 +1764,7 @@ Expandir el script para requerir un parámetro e imprimir alguna ayuda de sintax
 #### Bash script tutorial
 
 ##### Hello world
-Averiguar dónde se encuentra el intérprete de Bash:
+Averiguar dónde se encuentra el intérprete de Bash `which bash`:
 ```bash
 #!/bin/bash
 
@@ -1778,7 +1778,7 @@ echo $STRING
 ```bash
 #!/bin/bash
 
-tar cvzf home_backup.tar.gz /home/user
+tar cvzf home_backup.tar.gz --absolute-names ~/dir/dir2
 ```
 
 ##### Variables en scripts
@@ -1787,7 +1787,7 @@ Volviendo al ejemplo del respaldo, usemos una variable para nombrar nuestro arch
 #!/bin/bash
 
 OF=home_backup$(date +%Y%m%d).tar.gz
-tar -cvzf $OF --absolute-names /home/user
+tar -cvzf $OF --absolute-names ~/dir/dir2
 ```
 
 ##### Variables globales y locales
@@ -1849,7 +1849,7 @@ Number of arguments passed: 3  -> echo Number of arguments passed: $#
 ```
 
 ##### Ejecutar comando de Shell con Bash
-La mejor manera de ejecutar un comando de shell separado dentro de un script de Bash, es creando un nuevo subshell a través de la sintaxix `$()`.
+La mejor manera de ejecutar un comando de shell separado dentro de un script de Bash, es creando un nuevo subshell a través de la sintaxis`$()`.
 ```bash
 #!/bin/bash
 
@@ -1902,7 +1902,7 @@ My favorite colours are also blue, green and black:-)
 ```
 
 ##### Comando Bash trap
-El comando `trap` se puede usar en scripts Bash para capturar señales enviadas al script y luego ejecuta una subrutina cuando ocurre. El siguiente script detacta un `ctrl+c`:
+El comando `trap` se puede usar en scripts Bash para capturar señales enviadas al script y luego ejecuta una subrutina cuando ocurre. El siguiente script detecta un `ctrl+c`:
 ```bash
 #!/bin/bash
 
@@ -1960,7 +1960,7 @@ done
 ```
 Resultado:
 ```bash
-Debian Linu
+Debian Linux
 Linux
 Ubuntu
 FreeBSD
@@ -2005,9 +2005,9 @@ Aquí hay una declaración sencilla `if` que compruebe si existe un directorio. 
 ```bash
 #!/bin/bash
 
-directorio="~/.ssh"
+directorio="/home/user/.ssh"
 
-# checka la existencia del directorio
+# valida la existencia del directorio
 if [ -d $directorio  ]; then
     echo "Directory exists!"
 else
