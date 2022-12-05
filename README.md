@@ -2065,3 +2065,14 @@ Selecciona una palabra [1, 2 or 3]
 ```
 
 ##### Comparaciones de Bash
+Bash puede comparar unos o más valores, ya sean enteros o cadenas, para determinar si son iguales entre sí, si un numero es mayor a otro, etc.
+
+Comparaciones aritméticas
+Operación | valor | Significado
+-- | -- | --
+`-lt` | < | menor que
+`-gt` | > | mayor que
+`-la` | <= | menor o igual que
+`-ge` | >= | mayor o igual que
+`-eq` | == | igual
+`-ne` | != | diferente
