@@ -931,7 +931,7 @@ find / -mtime 3
 ```bash
 find / -atime 3
 ```
-21. Encuentra archivos y directorios vacios:
+21. Encuentra archivos y directorios vacíos:
 ```bash
 # archivos
 find / -type f -empty
@@ -2068,7 +2068,7 @@ Selecciona una palabra [1, 2 or 3]
 Bash puede comparar unos o más valores, ya sean enteros o cadenas, para determinar si son iguales entre sí, si un numero es mayor a otro, etc.
 
 Comparaciones aritméticas
-Operación | valor | Significado
+Operación | Valor | Significado
 -- | -- | --
 `-lt` | < | menor que
 `-gt` | > | mayor que
@@ -2076,3 +2076,521 @@ Operación | valor | Significado
 `-ge` | >= | mayor o igual que
 `-eq` | == | igual
 `-ne` | != | diferente
+
+Ejemplo 1:
+```bash
+#!/bin/bash
+
+# declarar enteros
+read -p "Primer números " NUM1
+read -p "Segundo números " NUM2
+
+if [ $NUM1 -eq $NUM2 ]; then
+    echo "Son iguales"
+else
+    echo "No son iguales"
+fi
+```
+
+Agregar un poco más de complejidad al incluir `elif` y determinar que número es mayor:
+```bash
+#!/bin/bash
+
+# declarar enteros
+read -p "Primer números " NUM1
+read -p "Segundo números " NUM2
+
+if [ $NUM1 -eq $NUM2 ]; then
+    echo "Son iguales"
+elif [ $NUM1 -gt $NUM2 ]; then
+    echo "NUM1 es mayor que NUM2"
+else
+    echo "NUM2 es mayor que NUM1"
+fi
+```
+
+Comparación de cadenas
+Operación | Significado
+-- | -- 
+`=` | igual
+`!=` | no es igual
+`<` | menor que
+`>` | mayor que
+`-n s1` | la cadena s1 no está vacía
+`-z s1` | la cadena s1 está vacía
+
+Ejemplo 1, comparar dos cadenas para ver si son iguales:
+```bash
+#!/bin/bash
+
+# declarar las cadenas
+read -p "First word " word1
+read -p "Second word " word2
+
+if [ $word1 = $word2 ]; then
+    echo "Son iguales"
+else
+    echo "No son iguales"
+fi
+```
+
+##### Prueba de archivos Bash
+En Bash, podemos probar para ver diferentes características sobre un archivo o directorio.
+
+Valor | Significado
+-- | --
+`-b` nombre de archivo | Bloquear archivo especial
+`-c` nombre de archivo | archivo de características especiales
+`-d` nombre del directorio | comprobrar la exitencia del directorio
+`-e` nombre de archivo | comprueba la existencia del archivo
+`-f` nombre de archivo | verifica la existencia regular de archivos, no directorios
+`-G` nombre de archivo | compruebe el nombre de archivo y es propiedad ID de grupo
+`-g` nombre de archivo | verdadero si el archivo existe y es set-group-id
+`-k` nombre de archivo | poco pegajoso
+`-L` nombre de archivo | enlace simbólico
+`-O` nombre de archivo | verdaero si el archivo existe y es propiedad Id del usuario
+`-r` nombre de archivo | comprobar si el archivo es legible
+`-S` nombre de archivo | comprobar si el archivo es socker
+`-s` nombre de archivo | comprobar si el archivo tiene un tamaño diferente a cero
+`-u` nombre de archivo | compruebe si el bit set-ser-id del archivo está configurado
+`-w` nombre de archivo | comprobar si es escribible
+`-x` nombre de archivo | comprobar si es ejecutable
+
+Verificar si un archivo existe o no:
+```bash
+#!/bin/bash
+
+file="bash.txt"
+if [ -e $file ]; then
+    echo "El archivo existe"
+else
+    echo "No existe"
+fi
+```
+Del mismo modo, por ejemplo, podermos usar el bucle `while` para comprobar si el archivo no existe. Terminara hasta que el archivo exista. NOTA el negador `!` niega la opción `-e`.
+```bash
+#!/bin/bash
+
+while [ ! -e file ]; do
+    sleep 1;
+done
+```
+
+##### Bucles
+Hay varios tipos de bucles que se pueden usar en Bash, incluidos `for`, `while` y `until`.
+
+Bucle `for`, este script enumerará todos los archivos y directorios en `/var`.
+```bash
+#!/bin/bash
+
+for f in $(ls /var); do
+    echo $f
+done
+```
+
+Un bucle `for` puede ejecutarse desde la línea de comandos:
+```
+for f in $(ls /var); do echo $f; done
+```
+Bucle `while`, continuará hasta que nuestra variable alcance un valor de 0 o menos.
+```bash
+#!/bin/bash
+
+count=6
+
+while [ $count -gt 0 ]; do
+    echo "Value: $count"
+    let count=count-1
+done
+```
+Resultado:
+```bash
+./while.sh
+
+# salida
+Value: 6
+Value: 5
+Value: 4
+Value: 3
+Value: 2
+Value: 1
+```
+
+Bucle `until`, funciona de manera similar a `while`:
+```bash
+#!/bin/bash
+
+count=6
+
+while [ $count -gt 0 ]; do
+    echo "Value: $count"
+    let count=count-1
+done
+```
+Resultado:
+```bash
+Value: 0
+Value: 1
+Value: 2
+Value: 3
+Value: 4
+Value: 5
+```
+
+##### Control de bucle con entrada
+El siguiente script, busca los archivos con espacios y los cambia por `_`:
+```bash
+#!/bin/bash
+
+# buscará y reemplazará los espacios en los nombre de archivos
+dir="."
+# controlar un bucle con el comando de lectura bash redirigiendo STDOUT como
+# STDIN al ciclo while
+find $dir -type f | while read file; do
+# usar [:space:] para encontrar espacios en los archivos
+if [[ $file = *[[:space:]]* ]]; then
+    # cambia los espacios por '_' (renombra el archivo)
+    mv "$file" `echo $file | tr ' ' '_'`
+fi;
+# fin del bucle while
+done
+```
+
+##### Funciones Bash
+Este ejemplo muestra cómo declarar una función y volver a llamarla más adelante en el script:
+```bash
+#!/bin/bash
+
+# las funciones Bash se puedeb declarar en cualquier orden
+function function_B {
+    echo "Funciton B"
+}
+function function_A {
+    echo $1
+}
+function function_D {
+    echo "function D"
+}
+function function_C {
+    echo $1
+}
+
+# llamada de funciones
+# pasar parametros a la función A
+function_A "FUN A"
+function_B
+# pasar parametros a la función C
+function_C "FUN C"
+function_D
+```
+Resultado:
+```bash
+FUN A
+Funciton B
+FUN C
+function D
+```
+
+##### Seleccionar bucle
+Los `select` permite solicitar al usuario que realice una acción:
+```bash
+#!/bin/bash
+
+PS3="Selecciona una palabra: "
+# bash select
+select word in "Linux" "Bash" "Scripting" "Tutorial"; do
+    echo "Palabra seleccionada $word"
+    # rompe, delo contrario bucle sin fin
+    break
+done
+
+exit 0
+```
+
+##### Declaración condicional case
+Las declaraciones `case` hacen que sea más fácil tener muchas posibilidades diferentes, minetras que una declaración `if` puede alargarse muy rápidamente si tiene más de pocas posobilidades para dar cuenta.
+```bash
+#!/bin/bash
+
+echo "Cuál es tu lenguaje/script preferido?"
+echo "1) Bash"
+echo "2) Perl"
+echo "3) Python"
+echo "4) C++"
+echo "5) No sé"
+read case;
+case $case in
+    1) echo "Bash";;
+    2) echo "Perl";;
+    3) echo "Python";;
+    4) echo "C++";;
+    5) exit
+esac
+```
+
+##### Citas y comillas Bash
+##### Escape de metacaracteres
+Cómo escapar metacaracteres, bash leerá literalmente los caracteres. Para eso necesita usar `\`. Ejemplo:
+```bash
+#!/bin/bash
+
+# string variable
+var="Bash script"
+
+# echo
+echo $var
+
+# cuando el metacarácter $ se escapa con  \, se leerá litermalmente
+echo \$var
+# barra invertida tiene un significado especial y se puede suprimir
+echo "\\"
+```
+Resultado:
+```bash
+Bash script
+$var
+\
+```
+
+##### Comillas simples
+Las comillas simples en Bash suprimirán el significado especial de todos los metacaracteres. Por lo tanto, los metacaracteres se leerán literalmente. No es posible usar otra comilla simple dentro de comillas simples, incluso si la comilla simple se escapa.
+```bash
+#!/bin/bash
+
+# string var
+var="Bash script"
+
+echo $var
+
+# el siginificado real se suprime al usar comillas simples
+echo '$var "$var"'
+```
+Resultado:
+```bash
+Bash script
+$var "$var"
+```
+
+##### Comillas dobles
+Sumprimira el significado especial de todos los metacaracteres excepto `$`, `\` y "\`". Cualquier otro metacarácter se leerá de manera literalmente. Se puede usar comillas simples dentro de de las comillas dobles. Si necesitamos usar comillas dobles dentro de comillas dobles, bash puede leerlas literalmente con `\`.
+```bash
+#!/bin/bash
+
+# string var
+var="Bash script"
+
+echo $var
+echo "It's $var  and \"$var\" using backticks: `date`"
+```
+Resultado:
+```bash
+Bash script
+It's Bash script  and "Bash script" using backticks: lun 05 dic 2022 14:42:19 CST
+```
+
+##### Comillas con estilo ANSI-C
+Este tipo de caracteres escapa con `\`, obtendra un significado especial de acuerdo con el estándar ANSI-C.
+
+Carácter | Significado | Carácter | Significado
+-- | -- | -- | --
+`\a` | alerta (campana) | `\b` | retroceso
+`\y` | un carácter de escape | `\F` | alimentación de formulario
+`\n` | nueva línea | `r` | retorno
+`\t` | tabulador horizontal | `\v` | tabulador verical
+`\\` | barra invertida | `\(más comilla simple)` | comilla simple
+`nnn` | valor octal [link](http://www.asciitable.com/ ASCII table) | `\xnn` | valor hexadecimal [link](http://www.asciitable.com/ ASCII table)
+
+La sintaxis para citar ansi-c es: `$' '`. Ejemplo:
+```bash
+#!/bin/bash
+
+# usar \n para una nueva línea, \x40 hexadecimal @
+# y \56 octal para .
+echo $'web: www.debian.org\nemail: root\x40debian\56org'
+```
+Resultado:
+```bash
+web: www.debian.org
+email: root@debian.org
+```
+
+##### Operaciones aritméticas
+Bash se puede utilizar para realizar cálculos.
+```bash
+#!/bin/bash
+
+let result1=$1+$2
+echo $1+$1=$result1 " -> # let result1=$1+$2"
+
+declare -i result2
+result2=$1+$2
+echo $1+$2=$result2 ' -> # declare -i result2; resulta=$1+$2'
+
+echo $1+$2=$(($1+$2)) ' -> # $(($1+$2))'
+```
+Resultado:
+```bash
+./sum.sh 150 300
+
+# salida
+150+150=450  -> # let result1=150+300
+150+300=450  -> # declare -i result2; resulta=$1+$2
+150+300=450  -> # $(($1+$2))
+```
+
+##### Aritmética Bash
+Operaciones básicas con Bash:
+```bash
+#!/bin/bash
+
+echo "### let ###"
+# suma
+let suma=3+5
+echo "3 + 5 =" $suma
+
+# resta
+let resta=7-8
+echo "7 - 8 =" $resta
+
+# multiplicación
+let mult=5*8
+echo "5 * 8 =" $mult
+
+# división
+let div=4/2
+echo "4 / 2 =" $div
+
+# módulo
+let mod=9%4
+echo "9 % 4 =" $mod
+
+# elevado
+let pow=2**2
+echo "2 ^ 2 =" $pow
+
+# hay dos formatos para la expansión aritética: $[ expresión  ] y $(( expresión ))
+# se puede usar cualquiera de las dos
+echo 4 + 5 = $(( 4 + 4 ))
+echo 7 - 7 = $[ 7 - 7 ]
+echo 4 x 6 = $(( 4 * 6 ))
+echo 6 / 3 = $(( 6 / 3 ))
+echo 8 % 7 = $(( 8 % 7 ))
+echo 2 ^ 8 = $[ 2 ** 8 ]
+
+echo "### declare ###"
+
+echo -e "Ingrese dos números \c"
+read num1 num2
+declare -i result
+result=$num1+$num2
+echo "El resultado es: $result"
+
+# convertir números binario 10001
+result=2#10001
+echo $result
+
+# convertir número octal 16
+result=8#16
+echo $result
+
+# convertir número hexadecimal 0xE6A
+result=16#E6A
+echo $result
+```
+Resultado:
+```bash
+### let ###
+3 + 5 = 8
+7 - 8 = -1
+5 * 8 = 40
+4 / 2 = 2
+9 % 4 = 1
+2 ^ 2 = 4
+4 + 5 = 8
+7 - 7 = 0
+4 x 6 = 24
+6 / 3 = 2
+8 % 7 = 1
+2 ^ 8 = 256
+### declare ###
+Ingrese dos números 12 11
+El resultado es: 23
+17
+14
+3690
+```
+
+##### Redondeo de número de punto flotante
+```bash
+#!/bin/bash
+
+float_num=3.3446
+echo $float_num
+
+# redondear
+printf "%.0f\n" $float_num
+
+# or
+printf "%.*f\n" 1 $float_num
+```
+Resultado:
+```bash
+3.3446
+3
+3.3
+```
+
+##### Cálculos de coma flontante
+Usar `bc` para realizar cálculos de coma flotante.
+```bash
+#!/bin/bash
+
+echo "Valor:"
+read input
+echo "Resultado con 2 dígitos después del punto:"
+echo "scale=2; $input" | bc
+
+echo "Resultado con 10 dígitos:"
+echo "scale=10; $input" | bc
+
+echo "Resultado redondeado:"
+echo $input | bc
+```
+Resultado:
+```bash
+Valor:
+10/3.4
+Resultado con 2 dígitos después del punto:
+2.94
+Resultado con 10 dígitos:
+2.9411764705
+Resultado redondeado:
+2
+```
+
+##### Redirecciones
+Cómo redirigir el error estándar y salida estándar.
+
+STDOUT del bash a STDERR
+```bash
+#!/bin/bash
+
+echo "Redirigir STDOUT a STRERR" 1>&2
+```
+Redirigir la salida a un archivo:
+```bash
+./one.sh
+
+# solo en pantalla, no lo guarad en archivo
+./one.sh > salida.txt
+cat salida.txt
+
+# no en pantalla, lo envía al archivo
+./one.sh 2> salida.txt
+cat salida.txt
+```
+
+STRERR del script a STDOUT
+```bash
+
+```
