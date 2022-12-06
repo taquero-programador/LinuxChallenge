@@ -2150,7 +2150,7 @@ Valor | Significado
 `-L` nombre de archivo | enlace simbólico
 `-O` nombre de archivo | verdaero si el archivo existe y es propiedad Id del usuario
 `-r` nombre de archivo | comprobar si el archivo es legible
-`-S` nombre de archivo | comprobar si el archivo es socker
+`-S` nombre de archivo | comprobar si el archivo es socket
 `-s` nombre de archivo | comprobar si el archivo tiene un tamaño diferente a cero
 `-u` nombre de archivo | compruebe si el bit set-ser-id del archivo está configurado
 `-w` nombre de archivo | comprobar si es escribible
@@ -2220,11 +2220,11 @@ Bucle `until`, funciona de manera similar a `while`:
 ```bash
 #!/bin/bash
 
-count=6
+count=0
 
-while [ $count -gt 0 ]; do
+until [ $count -gt 5  ]; do
     echo "Value: $count"
-    let count=count-1
+    let count=count+1
 done
 ```
 Resultado:
@@ -2300,7 +2300,7 @@ PS3="Selecciona una palabra: "
 # bash select
 select word in "Linux" "Bash" "Scripting" "Tutorial"; do
     echo "Palabra seleccionada $word"
-    # rompe, delo contrario bucle sin fin
+    # rompe, de lo contrario bucle sin fin
     break
 done
 
@@ -2308,7 +2308,7 @@ exit 0
 ```
 
 ##### Declaración condicional case
-Las declaraciones `case` hacen que sea más fácil tener muchas posibilidades diferentes, minetras que una declaración `if` puede alargarse muy rápidamente si tiene más de pocas posobilidades para dar cuenta.
+Las declaraciones `case` hacen que sea más fácil tener muchas posibilidades diferentes, mientras que una declaración `if` puede alargarse muy rápidamente si tiene más de pocas posobilidades para dar cuenta.
 ```bash
 #!/bin/bash
 
@@ -2581,16 +2581,18 @@ Redirigir la salida a un archivo:
 ```bash
 ./one.sh
 
-# solo en pantalla, no lo guarad en archivo
+# solo en pantalla, no lo guarda en archivo
 ./one.sh > salida.txt
 cat salida.txt
 
-# no en pantalla, lo envía al archivo
+# no en pantalla, lo envía al archivo (error)
 ./one.sh 2> salida.txt
 cat salida.txt
 ```
 
 STRERR del script a STDOUT
 ```bash
+#!/bin/bash
 
+cat $1 2>1&
 ```
