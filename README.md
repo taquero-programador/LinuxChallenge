@@ -2594,5 +2594,86 @@ STRERR del script a STDOUT
 ```bash
 #!/bin/bash
 
-cat $1 2>1&
+cat $1 2>&1
+```
+Resultado:
+```bash
+./one.sh /etc/shadow
+cat: /etc/shadow: Permiso denegado
+
+./one.sh /etc/shadow > salida.txt
+cat salida.txt
+# salida
+cat: /etc/shadow: Permiso denegado
+
+./one.sh /etc/shadow 2> salida.txt
+cat: /etc/shadow: Permiso denegado
+cat salida.txt
+# vacio
+```
+
+##### Salida estándar a pantalla
+La forma sencilla de redirigir una salida estándar (stdout) es simplemente usar cualquier comando, ya que, de forma predeterminada, stdout se redirige automáticamente
+ a la pantalla. Primero crear un archivo `file`:
+```bash
+touch file1
+
+ls file1
+# la salida devuelve el archivo
+```
+
+##### Salida estándar a archivo
+Para anular el comportamiento predeterminado de STDOUT podemos usar `>` para redirigir la salida al archivo:
+```bash
+ls file1 > salida.txt
+```
+
+##### STDERR a archivo
+Por defecto STDERR se muestra en pantalla:
+```bash
+ls file2
+# retorna el error en pantalla
+```
+Redirigir el error estándar (STDERR) a un archivo y la salida estándar a pantalla por defecto:
+```bash
+ls file1 file2 2> salida.txt
+# salida
+file1
+
+cat salida.txt
+# salida
+ls: no se puede acceder a 'file2': No existe el fichero o el directorio
+```
+
+##### STDOUT to STDERR
+También es posible redirigir STDOUT y STDERR al mismo archivo:
+```bash
+ls file1 file2 2> salida.txt 1>&2
+
+cat salida.txt
+# salida
+ls: no se puede acceder a 'file2': No existe el fichero o el directorio
+file1
+```
+
+##### Estándar a salida estándar
+El ejemplo anterior se puede revertir redirigiendo STDERR al mismo descriptor que STDOUT (similar al anterior):
+```bash
+ls file1 file2 > salida.txt 2>&1
+
+cat salida.txt
+# salida
+ls: no se puede acceder a 'file2': No existe el fichero o el directorio
+file1
+```
+
+##### STDERR y STDOUT para archivar
+Los dos ejemplos anteriores redirigieron STDOUT Y STDERR a un archivo. Otra forma de lograr el mismo efecto es de la siguiente manera:
+```bash
+ls file1 file2 &> salida.txt
+
+cat salida.txt
+# salida
+ls: no se puede acceder a 'file2': No existe el fichero o el directorio
+file1
 ```
